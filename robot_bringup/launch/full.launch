@@ -1,0 +1,44 @@
+<launch>
+  <arg name="robot_address" default="10.42.0.138"/>
+  <arg name="robot_name"    default="robot"/>
+  <arg name="robot_base"    default="kobuki"/>
+
+  <machine name="$(arg robot_name)" address="$(arg robot_address)" env-loader="/opt/ros/kinetic/remote.sh" user="ngenator"/>
+
+  <!-- Robot Driver -->
+  <include file="$(find robot_driver)/launch/includes/$(arg robot_base).launch">
+    <arg name="robot_name" value="$(arg robot_name)"/>
+  </include>
+
+  <group ns="$(arg robot_name)">
+    <!-- Robot Sensors -->
+    <group ns="sensors">        
+      <include file="$(find robot_bringup)/launch/includes/sensors/rplidar.launch">
+        <arg name="robot_name" value="$(arg robot_name)"/>
+        <arg name="motor_pwm"  value="600"/>
+        <arg name="frame_id"   value="plate_middle_link"/> <!-- The lidar is currently mounted directly in the middle of the 2nd plate -->
+      </include>
+
+      <include file="$(find robot_bringup)/launch/includes/sensors/r200.launch">
+        <arg name="robot_name" value="$(arg robot_name)"/>
+      </include>
+    </group>
+
+    <!-- Teleop -->
+    <include file="$(find robot_teleop)/launch/includes/joystick.launch">
+      <arg name="robot_name" value="$(arg robot_name)"/>
+      <arg name="cmd_vel"    value="velocity_smoother/raw_cmd_vel"/>
+    </include>
+  </group>
+
+  <include file="$(find robot_bringup)/launch/includes/mapping/gmapping.launch">
+    <arg name="robot_name" value="$(arg robot_name)"/>
+    <arg name="scan_topic" value="$(arg robot_name)/sensors/scan"/>
+  </include>
+
+  <include file="$(find robot_navigation)/launch/move_base.launch"/>
+
+  <include file="$(find robot_bringup)/launch/visualize.launch">
+    <arg name="robot_base" value="$(arg robot_base)"/>
+  </include>
+</launch>

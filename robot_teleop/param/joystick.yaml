@@ -1,0 +1,9 @@
+teleop:
+  drive:
+    axis_mappings:
+    - {axis: 4, offset: 0.0, scale: 0.5, target: linear.x}  # left stick up/down
+    - {axis: 3, offset: 0.0, scale: 1.5, target: angular.z} # left stick left/right
+    deadman_buttons: [2]
+    message_type: geometry_msgs/Twist
+    topic_name: cmd_vel
+    type: topic

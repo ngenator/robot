@@ -1,0 +1,14 @@
+<launch>
+  <arg name="manager" default="robot"/>
+
+  <node pkg="nodelet" type="nodelet" name="navigation_velocity_smoother" 
+        args="load yocs_velocity_smoother/VelocitySmootherNodelet $(arg robot_name)_nodelet_manager">
+    <rosparam file="$(find robot_bringup)/param/defaults/smoother.yaml" command="load"/>
+    
+    <remap from="navigation_velocity_smoother/smooth_cmd_vel" to="$(arg robot_name)/commands/velocity"/>
+
+    <!-- Robot velocity feedbacks; use the default base configuration -->
+    <remap from="navigation_velocity_smoother/odometry"      to="$(arg robot_name)/odom"/>
+    <remap from="navigation_velocity_smoother/robot_cmd_vel" to="$(arg robot_name)/commands/velocity"/>
+  </node>
+</launch>

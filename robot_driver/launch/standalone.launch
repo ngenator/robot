@@ -1,9 +1,10 @@
 <launch>
   <arg name="robot_address" default="10.42.0.138"/>
   <arg name="robot_name"    default="robot"/>
+  <arg name="robot_base"    default="kobuki"/>
 
   <machine name="$(arg robot_name)" address="$(arg robot_address)" env-loader="/opt/ros/kinetic/remote.sh" user="ngenator"/>
 
   <!-- Start the driver for the mobile base. options: kobuki, roomba -->
-  <include file="$(find robot_driver)/launch/includes/kobuki.launch"/>
+  <include file="$(find robot_driver)/launch/includes/$(arg robot_base).launch"/>
 </launch>

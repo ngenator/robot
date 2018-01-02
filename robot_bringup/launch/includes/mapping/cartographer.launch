@@ -1,0 +1,11 @@
+<launch>
+  <arg name="robot_name" default="robot"/>
+
+  <arg name="scan_topic" default="/mobile_base/sensors/scan"/>
+
+  <node name="mapping" pkg="cartographer_ros" type="cartographer_node" args="-configuration_directory $(find robot)/config -configuration_basename cartographer.lua">
+    <remap from="scan" to="$(arg scan_topic)"/>
+  </node>
+
+  <node name="occupancy_grid" pkg="cartographer_ros" type="cartographer_occupancy_grid_node" args="-resolution 0.015"/>
+</launch>

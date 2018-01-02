@@ -1,0 +1,30 @@
+{
+	"folders": [
+		{
+			"path": "robot"
+		},
+		{
+			"path": "robot_bringup"
+		},
+		{
+			"path": "robot_driver"
+		},
+		{
+			"path": "robot_teleop"
+		},
+		{
+			"path": "robot_description"
+		},
+		{
+			"path": "robot_navigation"
+		}
+	],
+	"settings": {
+		"python.autoComplete.extraPaths": [
+			"/home/ngenator/catkin_ws/install_isolated/lib/python2.7/dist-packages",
+			"/home/ngenator/create_ws/devel/lib/python2.7/dist-packages",
+			"/home/ngenator/ruemba_ws/devel/lib/python2.7/dist-packages",
+			"/opt/ros/kinetic/lib/python2.7/dist-packages"
+		]
+	}
+}
