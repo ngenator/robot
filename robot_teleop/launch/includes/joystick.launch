@@ -1,0 +1,34 @@
+<launch>
+  <arg name="respawn" default="true"/>
+
+  <arg name="robot_name" default="robot"/>
+  <arg name="robot_base" default="kobuki"/>
+
+  <!-- Xbox 360 controller params -->
+  <rosparam command="load" file="$(find robot_teleop)/param/joystick/mobile_base/$(arg robot_base).yaml"/>
+
+  <!--JOYSTIC NODE -->
+  <node name="joystick" pkg="joy" type="joy_node" respawn="$(arg respawn)">
+    <param name="dev" type="string" value="/dev/input/js0"/>
+
+    <param name="deadzone"          type="double" value="0.05"/>
+    <param name="coalesce_interval" type="double" value="0.001"/>
+    <param name="autorepeat_rate"   type="int"    value="5"/>
+  </node>
+
+  <!-- JOYSTIC TELEOP NODE -->
+  <!-- <node name="joystick_teleop" pkg="joy_teleop" type="joy_teleop.py" respawn="$(arg respawn)">
+    <remap from="cmd_vel" to="/robot_velocity_smoother/raw_cmd_vel"/>
+  </node> -->
+
+  <node name="turtlebot_teleop_joystick" pkg="turtlebot_teleop" type="turtlebot_teleop_joy">
+    <param name="scale_angular" value="1.5"/>
+    <param name="scale_linear"  value="0.5"/>
+    <param name="axis_deadman"  value="4"/>
+    <param name="axis_linear"   value="1"/>
+    <param name="axis_angular"  value="0"/>
+    
+    <remap from="turtlebot_teleop_joystick/cmd_vel" to="/robot_velocity_smoother/raw_cmd_vel"/>
+  </node>
+
+</launch>

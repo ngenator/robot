@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/ngenator/catkin_ws/install_isolated/include",
+        "/home/ngenator/create_ws/devel/include",
+        "/home/ngenator/ruemba_ws/devel/include",
+        "/opt/ros/kinetic/include",
+        "/usr/include"
+      ],
+      "name": "Linux"
+    }
+  ]
+}

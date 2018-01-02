@@ -1,0 +1,65 @@
+teleop:
+  drive:
+    axis_mappings:
+    - {axis: 1, offset: 0.0, scale: 0.5, target: linear.x}  # left stick up/down
+    - {axis: 0, offset: 0.0, scale: 1.5, target: angular.z} # left stick left/right
+    deadman_buttons: []
+    message_type: geometry_msgs/Twist
+    topic_name: cmd_vel
+    type: topic
+  power_off:
+    deadman_buttons: [6] # select button
+    axis_mappings: []
+    message_type: kobuki_msgs/MotorPower
+    message_value:
+    - {target: state, value: 0}
+    topic_name: /mobile_base/commands/motor_power
+    type: topic
+  power_on:
+    deadman_buttons: [7] # start button
+    axis_mappings: []
+    message_type: kobuki_msgs/MotorPower
+    message_value:
+    - {target: state, value: 1}
+    topic_name: /mobile_base/commands/motor_power
+    type: topic
+  horn_1:
+    deadman_buttons: [4] # LB
+    axis_mappings: []
+    message_type: kobuki_msgs/Sound
+    message_value:
+    - {target: value, value: 3}
+    topic_name: /mobile_base/commands/sound
+    type: topic
+  horn_2:
+    deadman_buttons: [5] # RB
+    axis_mappings: []
+    message_type: kobuki_msgs/Sound
+    message_value:
+    - {target: value, value: 2}
+    topic_name: /mobile_base/commands/sound
+    type: topic
+  safety_on:
+    deadman_buttons: [0] # A button
+    axis_mappings: []
+    message_type: std_msgs/Empty
+    topic_name: /safety_controller/enable
+    type: topic
+  safety_off:
+    deadman_buttons: [1] # B button
+    axis_mappings: []
+    message_type: std_msgs/Empty
+    topic_name: /safety_controller/disable
+    type: topic
+    
+# 0  A
+# 1  B
+# 2  X
+# 3  Y
+# 4  LB
+# 5  RB
+# 6  back
+# 7  xbox button
+# 8  power
+# 9  Button stick left 
+# 10 Button stick right 

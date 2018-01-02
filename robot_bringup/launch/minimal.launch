@@ -1,0 +1,14 @@
+<launch>
+  <arg name="robot_name" default="robot"/>
+  <arg name="robot_base" default="kobuki"/>
+
+  <group ns="$(arg robot_name)">
+    <include file="$(find robot_driver)/launch/standalone.launch">
+      <param name="robot_name" value="$(arg robot_name)"/>
+      <param name="robot_base" value="$(arg robot_base)"/>
+    </include>
+
+    <include file="$(find robot_teleop)/launch/">
+  </include>
+
+</launch>

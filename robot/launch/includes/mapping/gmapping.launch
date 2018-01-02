@@ -1,0 +1,15 @@
+<launch>
+  <arg name="odom_topic" default="/mobile_base/odom">
+
+  <node name="mapping" pkg="gmapping"  type="slam_gmapping" output="screen">
+    <param name="map_update_interval" type="double" value="1.0"/>
+    <param name="maxUrange"           type="double" value="7.0"/>
+    <param name="maxRange"            type="double" value="8.0"/>
+    <param name="linearUpdate"        type="double" value="0.1"/>
+    <param name="angularUpdate"       type="double" value="0.1"/>
+    <param name="temporalUpdate"      type="double" value="-0.5"/>
+    <param name="delta"               type="double" value="0.015"/>
+
+    <remap from="odom" to="$(arg odom_topic)"/>
+  </node>
+</launch>

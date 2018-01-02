@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+export SSID="${SSID:-Ruemba}"
+export PASSWORD="${PASSWORD:-robotsarecool}"
+export IFACE="${IFACE:-wlx9cefd5febefd}"
+
+echo "Setting up hotspot..."
+
+active="$(nmcli connection show $SSID-$IFACE 2>&1 | grep GENERAL.STATE | grep -c activated)"
+if [[ $active -ne 1 ]]; then
+    nmcli connection show $SSID-$IFACE >& /dev/null
+    ret=$?
+
+    if [[ $ret -ne 0 ]]; then
+        echo "Creating hotspot config for $SSID on $IFACE"
+        nmcli connection delete $SSID-$IFACE >& /dev/null
+        nmcli device wifi hotspot ifname $IFACE ssid $SSID con-name $SSID-$IFACE password $PASSWORD
+        sleep 5
+    else
+        echo "Hotspot config exists"
+    fi
+
+    echo "Activating hotspot"
+    nmcli connection up $SSID-$IFACE
+    ret=$?
+
+    if [[ $ret -eq 0 ]]; then
+        echo "
+Hotspot is running!
+
+INTERFACE: $IFACE
+     SSID: $SSID
+ PASSWORD: $PASSWORD
+"   
+    else
+        echo "Couldn't activate hotspot"
+    fi
+else 
+    echo "Hotspot is already active!"
+fi
+

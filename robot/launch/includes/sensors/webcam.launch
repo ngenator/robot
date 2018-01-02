@@ -1,0 +1,10 @@
+<launch>
+  <arg name="machine" default="robot"/>
+  
+  <node name="webcam" pkg="usb_cam" type="usb_cam_node" machine="$(arg machine)">
+    <param name="pixel_format" value="yuyv"/>
+    <param name="image_width"  value="640"/>
+    <param name="image_height" value="360"/>
+    <param name="framerate"    value="24"/>
+  </node>
+</launch>
