@@ -1,17 +1,17 @@
 <launch>
   <arg name="robot_name" default="robot"/>
-  
+
   <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find turtlebot_description)/robots/kobuki_hexagons_r200.urdf.xacro'" />
   <param name="robot_description" command="$(arg urdf_file)" />
-  
+
   <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_nodelet_manager" args="manager" machine="$(arg robot_name)"/>
-  
-  <node pkg="nodelet" type="nodelet" name="$(arg robot_name)" 
+
+  <node pkg="nodelet" type="nodelet" name="$(arg robot_name)"
     args="load kobuki_node/KobukiNodelet $(arg robot_name)_nodelet_manager" machine="$(arg robot_name)">
     <rosparam command="load" file="$(find robot_driver)/param/kobuki/mobile_base.yaml"/>
   </node>
 
-  <node ns="$(arg robot_name)" pkg="nodelet" type="nodelet" name="bumper_pointcloud" 
+  <node ns="$(arg robot_name)" pkg="nodelet" type="nodelet" name="bumper_pointcloud"
     args="load kobuki_bumper2pc/Bumper2PcNodelet $(arg robot_name)_nodelet_manager" machine="$(arg robot_name)">
       <param name="pointcloud_radius" type="double" value="0.24"/>
 
@@ -21,7 +21,7 @@
 
   <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" machine="$(arg robot_name)">
     <rosparam command="load" file="$(find robot_driver)/param/kobuki/diagnostics.yaml"/>
-    
+
     <!-- Set the prefixes to remove using the robot_name arg -->
     <rosparam param="analyzers/power/remove_prefix"       subst_value="true">$(arg robot_name)_nodelet_manager</rosparam>
     <rosparam param="analyzers/kobuki/remove_prefix"      subst_value="true">$(arg robot_name)_nodelet_manager</rosparam>
@@ -35,27 +35,23 @@
     <remap from="joint_states" to="$(arg robot_name)/joint_states"/>
   </node>
 
-  <node pkg="nodelet" type="nodelet" name="local_nodelet_manager" args="manager"/>
-
   <!-- velocity commands multiplexer -->
-  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet local_nodelet_manager">
-    <param name="yaml_cfg_file" value="$(find robot_driver)/param/mux.yaml"/>
-    
-    <remap from="cmd_vel_mux/output/cmd_vel" to="$(arg robot_name)_velocity_smoother/raw_cmd_vel"/>
+  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet $(arg robot_name)_nodelet_manager">
+    <rosparam param="yaml_cfg_data">
+      {
+        subscribers: [
+          { name: "Safety Controller", topic: "input/safety",     timeout: 1.0, priority: 100 },
+          { name: "Teleoperation",     topic: "input/teleop",     timeout: 1.0, priority: 10 },
+          { name: "Navigation",        topic: "input/navigation", timeout: 1.0, priority: 1 }
+        ],
+        publisher: "output/cmd_vel"
+      }
+    </rosparam>
+
+    <remap from="cmd_vel_mux/output/cmd_vel" to="$(arg robot_name)/commands/velocity"/>
   </node>
 
-  <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_velocity_smoother" 
-      args="load yocs_velocity_smoother/VelocitySmootherNodelet $(arg robot_name)_nodelet_manager" respawn="true" machine="$(arg robot_name)">
-    <rosparam file="$(find robot_bringup)/param/defaults/smoother.yaml" command="load"/>
-    
-    <remap from="$(arg robot_name)_velocity_smoother/smooth_cmd_vel" to="$(arg robot_name)/commands/velocity"/>
-
-    <!-- Robot velocity feedbacks; use the default base configuration -->
-    <remap from="$(arg robot_name)_velocity_smoother/odometry"      to="$(arg robot_name)/odom"/>
-    <remap from="$(arg robot_name)_velocity_smoother/robot_cmd_vel" to="$(arg robot_name)/commands/velocity"/>
-  </node>
-
-  <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_safety_controller" 
+  <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_safety_controller"
     args="load kobuki_safety_controller/SafetyControllerNodelet $(arg robot_name)_nodelet_manager" machine="$(arg robot_name)">
     <remap from="$(arg robot_name)_safety_controller/cmd_vel"           to="cmd_vel_mux/input/safety"/>
     <remap from="$(arg robot_name)_safety_controller/events/bumper"     to="$(arg robot_name)/events/bumper"/>

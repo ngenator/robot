@@ -2,12 +2,11 @@
   <arg name="robot_name" default="robot"/>
 
   <arg name="scan_topic" default="mobile_base/sensors/scan"/>
-  <arg name="odom_topic" default="robot/odom"/>
 
   <node name="mapping" pkg="cartographer_ros" type="cartographer_node" args="-configuration_directory $(find robot)/config -configuration_basename cartographer.lua">
     <remap from="scan" to="$(arg scan_topic)"/>
-    <remap from="odom" to="$(arg odom_topic)"/>
-    <remap from="imu" to="/robot/sensors/imu_data_raw"/>
+    <remap from="odom" to="/$(arg robot_name)/odom"/>
+    <remap from="imu"  to="/$(arg robot_name)/sensors/imu_data_raw"/>
   </node>
 
   <node name="occupancy_grid" pkg="cartographer_ros" type="cartographer_occupancy_grid_node" args="-resolution 0.015"/>

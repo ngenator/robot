@@ -6,17 +6,17 @@
   <machine name="$(arg robot_name)" address="$(arg robot_address)" env-loader="/opt/ros/kinetic/remote.sh" user="ngenator"/>
 
   <!-- Robot Driver -->
-  <include file="$(find robot_driver)/launch/includes/$(arg robot_base).launch">
+  <include file="$(find robot_driver)/launch/$(arg robot_base).launch">
     <arg name="robot_name" value="$(arg robot_name)"/>
   </include>
 
   <group ns="$(arg robot_name)">
     <!-- Robot Sensors -->
-    <group ns="sensors">        
+    <group ns="sensors">
       <include file="$(find robot_bringup)/launch/includes/sensors/rplidar.launch">
         <arg name="robot_name" value="$(arg robot_name)"/>
         <arg name="motor_pwm"  value="100"/>
-        <arg name="frame_id"   value="plate_middle_link"/> <!-- The lidar is currently mounted directly in the middle of the 2nd plate -->
+        <arg name="frame_id"   value="plate_middle_link"/> <!-- TODO update when the 3rd stack is added -->
       </include>
 
       <include file="$(find robot_bringup)/launch/includes/sensors/r200.launch">
@@ -31,13 +31,15 @@
     </include>
   </group>
 
-  <include file="$(find robot_bringup)/launch/includes/mapping/gmapping.launch">
+  <include file="$(find robot_bringup)/launch/includes/mapping/karto.launch">
     <arg name="robot_name" value="$(arg robot_name)"/>
-    <arg name="scan_topic" value="$(arg robot_name)/sensors/scan_filtered"/>
+    <arg name="scan_topic" value="$(arg robot_name)/sensors/scan"/>
   </include>
 
   <include file="$(find robot_navigation)/launch/move_base.launch">
-    <arg name="laser_topic" value="$(arg robot_name)/sensors/scan_filtered"/>
+    <arg name="robot_name"   value="$(arg robot_name)"/>
+    <arg name="scan_topic"   value="$(arg robot_name)/sensors/scan"/>
+    <arg name="bumper_topic" value="$(arg robot_name)/sensors/bumper"/>
   </include>
 
   <!-- <include file="$(find robot_navigation)/launch/exploration.launch">
