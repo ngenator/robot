@@ -1,0 +1,479 @@
+amcl:
+  base_frame_id: base_footprint
+  global_frame_id: map
+  gui_publish_rate: 10
+  initial_pose_a: 0
+  initial_pose_x: 0
+  initial_pose_y: 0
+  kld_err: 0.05
+  kld_z: 0.99
+  laser_lambda_short: 0.1
+  laser_likelihood_max_dist: 2
+  laser_max_beams: 60
+  laser_max_range: 12
+  laser_model_type: likelihood_field
+  laser_sigma_hit: 0.2
+  laser_z_hit: 0.5
+  laser_z_max: 0.05
+  laser_z_rand: 0.5
+  laser_z_short: 0.05
+  max_particles: 2000
+  min_particles: 500
+  odom_alpha1: 0.2
+  odom_alpha2: 0.2
+  odom_alpha3: 0.2
+  odom_alpha4: 0.2
+  odom_alpha5: 0.1
+  odom_frame_id: odom
+  odom_model_type: diff
+  recovery_alpha_fast: 0
+  recovery_alpha_slow: 0
+  resample_interval: 1
+  transform_tolerance: 1
+  update_min_a: 0.2
+  update_min_d: 0.25
+  use_map_topic: false
+diagnostic_aggregator:
+  analyzers:
+    input_ports:
+      contains:
+        - Digital Input
+        - Analog Input
+      path: Input Ports
+      remove_prefix: robot_nodelet_manager
+      timeout: 5
+      type: diagnostic_aggregator/GenericAnalyzer
+    kobuki:
+      contains:
+        - Watchdog
+        - Motor State
+      path: Kobuki
+      remove_prefix: robot_nodelet_manager
+      timeout: 5
+      type: diagnostic_aggregator/GenericAnalyzer
+    power:
+      contains:
+        - Battery
+      path: Power System
+      remove_prefix: robot_nodelet_manager
+      timeout: 5
+      type: diagnostic_aggregator/GenericAnalyzer
+    sensors:
+      contains:
+        - Cliff Sensor
+        - Wall Sensor
+        - Wheel Drop
+        - Motor Current
+        - Gyro Sensor
+      path: Sensors
+      remove_prefix: robot_nodelet_manager
+      timeout: 5
+      type: diagnostic_aggregator/GenericAnalyzer
+  base_path: ''
+  pub_rate: 1
+mapping:
+  angularUpdate: 0.436
+  delta: 0.01
+  linearUpdate: 0.5
+  map_update_interval: 30
+  maxRange: 8
+  maxUrange: 8
+  particles: 80
+  temporalUpdate: -1
+  xmax: 1
+  xmin: -1
+  ymax: 1
+  ymin: -1
+move_base:
+  DWAPlannerROS:
+    acc_lim_theta: 2
+    acc_lim_x: 0.5
+    acc_lim_y: 0
+    acc_limit_trans: 0.1
+    angular_sim_granularity: 0.1
+    forward_point_distance: 1
+    global_frame_id: odom
+    goal_distance_bias: 24
+    max_rot_vel: 3
+    max_scaling_factor: 0.2
+    max_trans_vel: 0.5
+    max_vel_x: 0.25
+    max_vel_y: 0
+    min_rot_vel: 0.4
+    min_trans_vel: 0.1
+    min_vel_x: 0
+    min_vel_y: 0
+    occdist_scale: 0.5
+    oscillation_reset_angle: 0.2
+    oscillation_reset_dist: 0.1
+    path_distance_bias: 32
+    prune_plan: false
+    publish_cost_grid_pc: true
+    publish_traj_pc: true
+    restore_defaults: false
+    rot_stopped_vel: 0.4
+    scaling_speed: 0.25
+    sim_granularity: 0.025
+    sim_time: 1
+    stop_time_buffer: 0.2
+    trans_stopped_vel: 0.1
+    twirling_scale: 0
+    use_dwa: true
+    vth_samples: 20
+    vtheta_samples: 20
+    vx_samples: 6
+    vy_samples: 1
+    xy_goal_tolerance: 0.1
+    yaw_goal_tolerance: 0.3
+  GlobalPlanner:
+    allow_unknown: true
+    cost_factor: 3
+    default_tolerance: 0
+    lethal_cost: 253
+    neutral_cost: 50
+    old_navfn_behavior: false
+    planner_costmap_publish_frequency: 0
+    planner_window_x: 0
+    planner_window_y: 0
+    publish_potential: true
+    publish_scale: 100
+    use_dijkstra: true
+    use_grid_path: false
+    use_quadratic: true
+  NavfnROS:
+    allow_unknown: true
+    default_tolerance: 0
+    planner_window_x: 0
+    planner_window_y: 0
+    visualize_potential: false
+  aggressive_reset:
+    reset_distance: 1.84
+  base_global_planner: navfn/NavfnROS
+  base_local_planner: dwa_local_planner/DWAPlannerROS
+  clearing_rotation_allowed: true
+  conservative_reset:
+    reset_distance: 3
+  conservative_reset_dist: 3
+  controller_frequency: 5
+  controller_patience: 3
+  global_costmap:
+    footprint: '[]'
+    footprint_padding: 0.01
+    global_frame: map
+    height: 10
+    inflation_layer:
+      cost_scaling_factor: 5
+      enabled: true
+      inflate_unknown: false
+      inflation_radius: 0.5
+    map_type: voxel
+    max_obstacle_height: 0.6
+    obstacle_layer:
+      bump:
+        clearing: false
+        data_type: PointCloud2
+        marking: true
+        max_obstacle_height: 0.15
+        min_obstacle_height: 0
+        topic: robot/sensors/bumper
+      combination_method: 1
+      enabled: true
+      footprint_clearing_enabled: true
+      mark_threshold: 0
+      max_obstacle_height: 0.6
+      observation_sources: scan bump
+      obstacle_range: 2.5
+      origin_z: 0
+      publish_voxel_map: false
+      raytrace_range: 3
+      scan:
+        clearing: true
+        data_type: LaserScan
+        marking: true
+        max_obstacle_height: 0.35
+        min_obstacle_height: 0.25
+        topic: robot/sensors/scan
+      track_unknown_space: true
+      unknown_threshold: 15
+      z_resolution: 0.2
+      z_voxels: 2
+    origin_x: 0
+    origin_y: 0
+    plugins:
+      - name: static_layer
+        type: 'costmap_2d::StaticLayer'
+      - name: obstacle_layer
+        type: 'costmap_2d::VoxelLayer'
+      - name: inflation_layer
+        type: 'costmap_2d::InflationLayer'
+    publish_frequency: 0.5
+    resolution: 0.05
+    robot_base_frame: base_footprint
+    robot_radius: 0.2
+    static_layer:
+      enabled: true
+    static_map: true
+    transform_tolerance: 0.5
+    update_frequency: 1
+    width: 10
+  local_costmap:
+    footprint: '[]'
+    footprint_padding: 0.01
+    global_frame: odom
+    height: 4
+    inflation_layer:
+      cost_scaling_factor: 5
+      enabled: true
+      inflate_unknown: false
+      inflation_radius: 0.5
+    map_type: voxel
+    max_obstacle_height: 0.6
+    obstacle_layer:
+      bump:
+        clearing: false
+        data_type: PointCloud2
+        marking: true
+        max_obstacle_height: 0.15
+        min_obstacle_height: 0
+        topic: robot/sensors/bumper
+      combination_method: 1
+      enabled: true
+      footprint_clearing_enabled: true
+      mark_threshold: 0
+      max_obstacle_height: 0.6
+      observation_sources: scan bump
+      obstacle_range: 2.5
+      origin_z: 0
+      publish_voxel_map: false
+      raytrace_range: 3
+      scan:
+        clearing: true
+        data_type: LaserScan
+        marking: true
+        max_obstacle_height: 0.35
+        min_obstacle_height: 0.25
+        topic: robot/sensors/scan
+      track_unknown_space: true
+      unknown_threshold: 15
+      z_resolution: 0.2
+      z_voxels: 2
+    origin_x: 0
+    origin_y: 0
+    plugins:
+      - name: obstacle_layer
+        type: 'costmap_2d::VoxelLayer'
+      - name: inflation_layer
+        type: 'costmap_2d::InflationLayer'
+    publish_frequency: 2
+    resolution: 0.01
+    robot_base_frame: base_footprint
+    robot_radius: 0.2
+    rolling_window: true
+    static_layer:
+      enabled: true
+    static_map: false
+    transform_tolerance: 0.5
+    update_frequency: 5
+    width: 4
+  max_planning_retries: -1
+  oscillation_distance: 0.2
+  oscillation_timeout: 10
+  planner_frequency: 1
+  planner_patience: 5
+  recovery_behavior_enabled: true
+  restore_defaults: false
+  shutdown_costmaps: false
+navigation_velocity_smoother:
+  accel_lim_v: 0.5
+  accel_lim_w: 2
+  decel_factor: 1.5
+  frequency: 20
+  robot_feedback: 2
+  speed_lim_v: 0.8
+  speed_lim_w: 5.4
+robot:
+  acceleration_limiter: false
+  base_frame: base_footprint
+  battery_capacity: 16.5
+  battery_dangerous: 13.2
+  battery_low: 14
+  bumper_pointcloud:
+    pointcloud_radius: 0.24
+  cmd_vel_timeout: 1
+  device_port: /dev/kobuki
+  joystick:
+    autorepeat_rate: 10
+    coalesce_interval: 0.001
+    deadzone: 0.05
+    dev: /dev/input/js0
+  joystick_velocity_smoother:
+    accel_lim_v: 0.5
+    accel_lim_w: 2
+    decel_factor: 1.5
+    frequency: 20
+    robot_feedback: 2
+    speed_lim_v: 0.8
+    speed_lim_w: 5.4
+  odom_frame: odom
+  publish_tf: true
+  sensors:
+    camera:
+      color:
+        image_raw:
+          compressed:
+            format: jpeg
+            jpeg_quality: 22
+            png_level: 9
+          compressedDepth:
+            depth_max: 10
+            depth_quantization: 100
+            png_level: 9
+          theora:
+            keyframe_frequency: 64
+            optimize_for: 1
+            quality: 31
+            target_bitrate: 800000
+      depth:
+        image_raw:
+          compressed:
+            format: jpeg
+            jpeg_quality: 80
+            png_level: 9
+          compressedDepth:
+            depth_max: 10
+            depth_quantization: 100
+            png_level: 9
+          theora:
+            keyframe_frequency: 64
+            optimize_for: 1
+            quality: 31
+            target_bitrate: 800000
+      driver:
+        base_frame_id: camera_link
+        camera_type: R200
+        color_backlight_compensation: 1
+        color_brightness: 56
+        color_contrast: 32
+        color_enable_auto_exposure: 1
+        color_enable_auto_white_balance: 1
+        color_exposure: 156
+        color_fps: 30
+        color_frame_id: camera_rgb_frame
+        color_gain: 32
+        color_gamma: 220
+        color_height: 480
+        color_hue: 0
+        color_optical_frame_id: camera_rgb_optical_frame
+        color_saturation: 128
+        color_sharpness: 0
+        color_white_balance: 6500
+        color_width: 640
+        depth_fps: 30
+        depth_frame_id: camera_depth_frame
+        depth_height: 480
+        depth_optical_frame_id: camera_depth_optical_frame
+        depth_width: 640
+        enable_color: true
+        enable_depth: true
+        enable_ir: false
+        enable_ir2: false
+        enable_pointcloud: false
+        enable_tf: true
+        enable_tf_dynamic: false
+        fisheye_frame_id: camera_fisheye_frame
+        fisheye_optical_frame_id: camera_fisheye_optical_frame
+        imu_frame_id: camera_imu_frame
+        imu_optical_frame_id: camera_imu_optical_frame
+        ir2_frame_id: camera_ir2_frame
+        ir2_optical_frame_id: camera_ir2_optical_frame
+        ir_frame_id: camera_ir_frame
+        ir_optical_frame_id: camera_ir_optical_frame
+        mode: manual
+        r200_auto_exposure_bottom_edge: 479
+        r200_auto_exposure_left_edge: 0
+        r200_auto_exposure_right_edge: 639
+        r200_auto_exposure_top_edge: 0
+        r200_dc_estimate_median_decrement: 5
+        r200_dc_estimate_median_increment: 5
+        r200_dc_lr_threshold: 12
+        r200_dc_median_threshold: 235
+        r200_dc_neighbor_threshold: 90
+        r200_dc_preset: 5
+        r200_dc_score_maximum_threshold: 420
+        r200_dc_score_minimum_threshold: 27
+        r200_dc_second_peak_threshold: 70
+        r200_dc_texture_count_threshold: 8
+        r200_dc_texture_difference_threshold: 80
+        r200_emitter_enabled: 1
+        r200_lr_auto_exposure_enabled: 0
+        r200_lr_exposure: 164
+        r200_lr_gain: 400
+        serial_no: ''
+        tf_publication_rate: 1
+        usb_port_id: ''
+      ir:
+        image_raw:
+          compressed:
+            format: jpeg
+            jpeg_quality: 80
+            png_level: 9
+          compressedDepth:
+            depth_max: 10
+            depth_quantization: 100
+            png_level: 9
+          theora:
+            keyframe_frequency: 64
+            optimize_for: 1
+            quality: 31
+            target_bitrate: 800000
+      ir2:
+        image_raw:
+          compressed:
+            format: jpeg
+            jpeg_quality: 80
+            png_level: 9
+          compressedDepth:
+            depth_max: 10
+            depth_quantization: 100
+            png_level: 9
+          theora:
+            keyframe_frequency: 64
+            optimize_for: 1
+            quality: 31
+            target_bitrate: 800000
+    rplidar:
+      angle_compensate: true
+      frame_id: plate_middle_link
+      inverted: false
+      motor_pwm: 600
+      serial_baudrate: 115200
+      serial_port: /dev/rplidar
+  teleop:
+    drive:
+      axis_mappings:
+        - axis: 4
+          offset: 0
+          scale: 0.5
+          target: linear.x
+        - axis: 3
+          offset: 0
+          scale: 1.5
+          target: angular.z
+      deadman_buttons:
+        - 2
+      message_type: geometry_msgs/Twist
+      topic_name: cmd_vel
+      type: topic
+  use_imu_heading: true
+  wheel_left_joint_name: wheel_left_joint
+  wheel_right_joint_name: wheel_right_joint
+robot_state_publisher:
+  publish_frequency: 5
+rosdistro: |
+  kinetic
+roslaunch:
+  uris:
+    host_10_42_0_1__34833: 'http://10.42.0.1:34833/'
+rosversion: |
+  1.12.12
+run_id: 6b79515c-f255-11e7-aad9-606720450f1c

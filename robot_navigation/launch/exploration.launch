@@ -1,0 +1,11 @@
+<launch>
+  <node pkg="frontier_exploration" type="explore_client" name="explore_client"/>
+
+  <node pkg="frontier_exploration" type="explore_server" name="explore_server">
+    <param name="frequency"     type="double" value="2.0"/>
+    <param name="goal_aliasing" type="double" value="8.0"/>
+
+    <rosparam file="$(find robot_navigation)/param/explore_costmap_params.yaml" command="load" />   
+  </node>
+
+</launch>

@@ -25,9 +25,9 @@
     </group>
 
     <!-- Teleop -->
-    <include file="$(find robot_teleop)/launch/includes/joystick.launch">
-      <arg name="robot_name" value="$(arg robot_name)"/>
-      <arg name="cmd_vel"    value="velocity_smoother/raw_cmd_vel"/>
+    <include file="$(find robot_teleop)/launch/joystick.launch">
+      <arg name="robot_name"  value="$(arg robot_name)"/>
+      <arg name="cmd_vel_out" value="/$(arg robot_name)_velocity_smoother/raw_cmd_vel"/>
     </include>
   </group>
 
@@ -38,7 +38,7 @@
 
   <include file="$(find robot_navigation)/launch/move_base.launch"/>
 
-  <include file="$(find robot_bringup)/launch/visualize.launch">
-    <arg name="robot_base" value="$(arg robot_base)"/>
-  </include>
+  <!-- <include file="$(find robot_navigation)/launch/exploration.launch">
+    <remap from="scan" to="$(arg robot_name)/sensors/scan"/>
+  </include> -->
 </launch>

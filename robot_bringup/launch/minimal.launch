@@ -10,31 +10,12 @@
     <arg name="robot_name" value="$(arg robot_name)"/>
   </include>
 
-  <group ns="$(arg robot_name)">
-    <!-- Robot Sensors -->
-    <group ns="sensors">
-      <include file="$(find robot_bringup)/launch/includes/sensors/r200.launch">
-        <arg name="robot_name" value="$(arg robot_name)"/>
-
-        <arg name="enable_depth"      value="false" />
-        <arg name="enable_ir"         value="true" />
-        <arg name="enable_ir2"        value="false" />
-        <arg name="enable_color"      value="true" />
-        <arg name="enable_pointcloud" value="false" />
-        <arg name="enable_tf"         value="false" />
-        <arg name="enable_tf_dynamic" value="false" />
-        <arg name="color_width"       value="1920" />
-        <arg name="color_height"      value="1080" />
-        <arg name="color_fps"         value="30" />
-      </include>
-    </group>
-
-    <!-- Teleop -->
-    <include file="$(find robot_teleop)/launch/includes/joystick.launch">
-      <arg name="cmd_vel" value="velocity_smoother/raw_cmd_vel"/>
-    </include>
-  </group>
-
+  <!-- Teleop -->
+  <include file="$(find robot_teleop)/launch/includes/joystick.launch">
+    <arg name="cmd_vel" value="velocity_smoother/raw_cmd_vel"/>
+  </include>
+  
+  <!-- Visualization -->
   <include file="$(find robot_bringup)/launch/visualize.launch">
     <arg name="robot_base" value="$(arg robot_base)"/>
   </include>

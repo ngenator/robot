@@ -1,6 +1,13 @@
 <launch>
-  <include file="$(find robot_navigation)/launch/velocity_smoother.launch"/>
-  <!-- <include file="$(find robot_navigation)/launch/includes/safety_controller.launch"/> -->
+  <arg name="robot_name" default="robot"/>
+
+  <include file="$(find robot_navigation)/launch/includes/velocity_smoother.launch">
+    <arg name="robot_name" value="$(arg robot_name)"/>
+  </include>
+
+  <include file="$(find robot_navigation)/launch/includes/amcl/r200.launch">
+    <arg name="robot_name" value="$(arg robot_name)"/>
+  </include>
 
   <arg name="odom_frame_id"   default="odom"/>
   <arg name="base_frame_id"   default="base_footprint"/>
@@ -8,7 +15,7 @@
   <arg name="odom_topic"      default="robot/odom" />
   <arg name="laser_topic"     default="robot/sensors/scan" />
 
-  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+  <node name="move_base" pkg="move_base" type="move_base" respawn="false">
     <rosparam file="$(find robot_navigation)/param/costmap_common_params.yaml"       command="load" ns="global_costmap" />
     <rosparam file="$(find robot_navigation)/param/costmap_common_params.yaml"       command="load" ns="local_costmap" />   
     <rosparam file="$(find robot_navigation)/param/local_costmap_params.yaml"        command="load" />   

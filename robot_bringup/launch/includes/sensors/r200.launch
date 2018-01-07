@@ -2,7 +2,7 @@
   <arg name="robot_name"  default="robot" />
   <arg name="manager"     default="nodelet_manager" />  <!-- Name of nodelet manager must be fully resolved -->
   <arg name="camera_type" default="R200" />                   <!-- Type of camera must be fully resolved -->
-  <arg name="camera"      default="r200" />
+  <arg name="camera"      default="camera" />
 
   <arg name="serial_no"    default="" />
   <arg name="usb_port_id"  default="" />
