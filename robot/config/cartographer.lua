@@ -19,7 +19,7 @@ options = {
   map_builder = MAP_BUILDER,
   trajectory_builder = TRAJECTORY_BUILDER,
   map_frame = "map",
-  tracking_frame = "base_footprint",
+  tracking_frame = "gyro_link",
   published_frame = "odom",
   odom_frame = "odom",
   provide_odom_frame = false,
@@ -55,7 +55,7 @@ TRAJECTORY_BUILDER_2D.motion_filter.max_angle_radians = math.rad(1.)
 TRAJECTORY_BUILDER_2D.submaps.resolution = 0.025
 TRAJECTORY_BUILDER_2D.submaps.num_range_data = 40.
 
-POSE_GRAPH.optimize_every_n_nodes = 30
+POSE_GRAPH.optimize_every_n_nodes = 0
 
 POSE_GRAPH.constraint_builder.log_matches = true
 POSE_GRAPH.constraint_builder.min_score = 0.62

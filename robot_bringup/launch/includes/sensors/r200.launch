@@ -48,7 +48,6 @@
   <group ns="$(arg camera)">
     <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_$(arg camera)_$(arg manager)" args="manager" machine="$(arg robot_name)"/>
 
-
     <node pkg="nodelet" type="nodelet" name="driver"
       args="load realsense_camera/$(arg camera_type)Nodelet $(arg robot_name)_$(arg camera)_$(arg manager)" machine="$(arg robot_name)">
       <param name="serial_no"                type="str"  value="$(arg serial_no)" />

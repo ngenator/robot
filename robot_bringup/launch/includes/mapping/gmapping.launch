@@ -1,16 +1,16 @@
 <launch>
   <arg name="robot_name" default="robot"/>
 
-  <arg name="scan_topic" default="/mobile_base/sensors/scan"/>
+  <arg name="scan_topic" default="/mobile_base/sensors/scan_filtered"/>
 
   <node name="mapping" pkg="gmapping"  type="slam_gmapping" machine="$(arg robot_name)">
-    <param name="map_update_interval" type="double" value="30.0"/>
-    <param name="maxUrange"           type="double" value="8.0"/>
+    <param name="map_update_interval" type="double" value="15.0"/>
+    <param name="maxUrange"           type="double" value="5.0"/>
     <param name="maxRange"            type="double" value="8.0"/>
     <param name="linearUpdate"        type="double" value="0.5"/>
-    <param name="angularUpdate"       type="double" value="0.436"/>
+    <param name="angularUpdate"       type="double" value="0.1"/>
     <param name="temporalUpdate"      type="double" value="-1.0"/>
-    <param name="particles"           type="int"    value="80"/>
+    <param name="particles"           type="int"    value="100"/>
     <param name="xmin"                type="double" value="-1.0"/>
     <param name="ymin"                type="double" value="-1.0"/>
     <param name="xmax"                type="double" value="1.0"/>

@@ -15,7 +15,7 @@
     <group ns="sensors">        
       <include file="$(find robot_bringup)/launch/includes/sensors/rplidar.launch">
         <arg name="robot_name" value="$(arg robot_name)"/>
-        <arg name="motor_pwm"  value="600"/>
+        <arg name="motor_pwm"  value="100"/>
         <arg name="frame_id"   value="plate_middle_link"/> <!-- The lidar is currently mounted directly in the middle of the 2nd plate -->
       </include>
 
@@ -27,16 +27,18 @@
     <!-- Teleop -->
     <include file="$(find robot_teleop)/launch/joystick.launch">
       <arg name="robot_name"  value="$(arg robot_name)"/>
-      <arg name="cmd_vel_out" value="/$(arg robot_name)_velocity_smoother/raw_cmd_vel"/>
+      <arg name="cmd_vel_out" value="/cmd_vel_mux/input/teleop"/>
     </include>
   </group>
 
   <include file="$(find robot_bringup)/launch/includes/mapping/gmapping.launch">
     <arg name="robot_name" value="$(arg robot_name)"/>
-    <arg name="scan_topic" value="$(arg robot_name)/sensors/scan"/>
+    <arg name="scan_topic" value="$(arg robot_name)/sensors/scan_filtered"/>
   </include>
 
-  <include file="$(find robot_navigation)/launch/move_base.launch"/>
+  <include file="$(find robot_navigation)/launch/move_base.launch">
+    <arg name="laser_topic" value="$(arg robot_name)/sensors/scan_filtered"/>
+  </include>
 
   <!-- <include file="$(find robot_navigation)/launch/exploration.launch">
     <remap from="scan" to="$(arg robot_name)/sensors/scan"/>
