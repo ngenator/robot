@@ -2,7 +2,7 @@
   <arg name="robot_name" default="robot"/>
   <arg name="respawn"    default="true"/>
 
-  <arg name="cmd_vel_out" default="/robot_velocity_smoother/raw_cmd_vel"/>
+  <arg name="cmd_vel_out" default="/cmd_vel_mux/input/teleop"/>
 
   <rosparam file="$(find robot_teleop)/param/joystick.yaml" command="load" />
 
@@ -22,10 +22,10 @@
     <param name="axis_deadman"  type="int"    value="4"/>
     <param name="axis_linear"   type="int"    value="1"/>
     <param name="axis_angular"  type="int"    value="0"/>
-    
+
     <remap from="turtlebot_teleop_joystick/cmd_vel" to="joystick_velocity_smoother/raw_cmd_vel"/>
   </node> -->
-  
+
   <node name="joystick_teleop" pkg="joy_teleop" type="joy_teleop.py" respawn="true">
     <remap from="cmd_vel" to="$(arg cmd_vel_out)"/>
   </node>

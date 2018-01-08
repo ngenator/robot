@@ -1,5 +1,5 @@
 explore_costmap:
-  robot_radius: 0.18
+  robot_radius: 0.20
 
   transform_tolerance: 0.5
   update_frequency: 5.0

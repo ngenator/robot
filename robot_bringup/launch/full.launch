@@ -2,6 +2,8 @@
   <arg name="robot_address" default="10.42.0.138"/>
   <arg name="robot_name"    default="robot"/>
   <arg name="robot_base"    default="kobuki"/>
+  <arg name="mapper"        default="gmapping"/>
+  <arg name="localization"  default="false"/>
 
   <machine name="$(arg robot_name)" address="$(arg robot_address)" env-loader="/opt/ros/kinetic/remote.sh" user="ngenator"/>
 
@@ -31,7 +33,7 @@
     </include>
   </group>
 
-  <include file="$(find robot_bringup)/launch/includes/mapping/karto.launch">
+  <include file="$(find robot_bringup)/launch/includes/mapping/$(arg mapper).launch">
     <arg name="robot_name" value="$(arg robot_name)"/>
     <arg name="scan_topic" value="$(arg robot_name)/sensors/scan"/>
   </include>
@@ -40,9 +42,10 @@
     <arg name="robot_name"   value="$(arg robot_name)"/>
     <arg name="scan_topic"   value="$(arg robot_name)/sensors/scan"/>
     <arg name="bumper_topic" value="$(arg robot_name)/sensors/bumper"/>
+    <arg name="depth_topic"  value="$(arg robot_name)/sensors/camera/depth/points"/>
   </include>
 
-  <!-- <include file="$(find robot_navigation)/launch/exploration.launch">
-    <remap from="scan" to="$(arg robot_name)/sensors/scan"/>
-  </include> -->
+  <include file="$(find robot_navigation)/launch/exploration.launch">
+    <arg name="scan_topic" value="$(arg robot_name)/sensors/scan"/>
+  </include>
 </launch>

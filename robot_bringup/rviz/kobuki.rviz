@@ -10,8 +10,7 @@ Panels:
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
-    Expanded:
-      - /Publish Point1
+    Expanded: ~
     Name: Tool Properties
     Splitter Ratio: 0.588679016
   - Class: rviz/Views
@@ -50,7 +49,7 @@ Visualization Manager:
         Z: 0
       Plane: XY
       Plane Cell Count: 100
-      Reference Frame: <Fixed Frame>
+      Reference Frame: map
       Value: true
     - Class: rviz/TF
       Enabled: true
@@ -660,6 +659,36 @@ Visualization Manager:
         {}
       Queue Size: 100
       Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /robot/sensors/camera/depth/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -684,21 +713,26 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -1.5299989
-      Class: rviz/TopDownOrtho
+      Class: rviz/ThirdPersonFollower
+      Distance: 2.71337938
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Scale: 61.1102409
-      Target Frame: map
-      Value: TopDownOrtho (rviz)
-      X: 0.693413079
-      Y: 0.252210706
+      Pitch: 0.580398381
+      Target Frame: base_footprint
+      Value: ThirdPersonFollower (rviz)
+      Yaw: 3.11539412
     Saved: ~
 Window Geometry:
   Displays:
