@@ -16,10 +16,16 @@
     <remap from="scan" to="scan_raw"/>
   </node>
 
-  <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter" machine="$(arg robot_name)">
+  <!-- <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter" machine="$(arg robot_name)">
     <rosparam command="load" file="$(find robot_bringup)/param/rplidar.yaml" />
 
-    <remap from="scan" to="scan_raw"/>
+    <remap from="scan"          to="scan_raw"/>
+    <remap from="scan_filtered" to="scan"/>
+  </node> -->
+
+  <node name="laser_filter" pkg="turtlebot_navigation" type="laser_footprint_filter"  machine="$(arg robot_name)">
+    <remap from="scan"          to="scan_raw"/>
     <remap from="scan_filtered" to="scan"/>
   </node>
+
 </launch>

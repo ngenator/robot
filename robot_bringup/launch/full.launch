@@ -40,6 +40,7 @@
 
   <include file="$(find robot_navigation)/launch/move_base.launch">
     <arg name="robot_name"   value="$(arg robot_name)"/>
+    <arg name="cmd_vel_out"  default="/cmd_vel_mux/input/navigation"/>
     <arg name="scan_topic"   value="$(arg robot_name)/sensors/scan"/>
     <arg name="bumper_topic" value="$(arg robot_name)/sensors/bumper"/>
     <arg name="depth_topic"  value="$(arg robot_name)/sensors/camera/depth/points"/>

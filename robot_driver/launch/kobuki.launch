@@ -37,30 +37,19 @@
 
   <!-- velocity commands multiplexer -->
   <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
-    args="load yocs_cmd_vel_mux/CmdVelMuxNodelet $(arg robot_name)_nodelet_manager" machine="$(arg robot_name)">
+    args="load yocs_cmd_vel_mux/CmdVelMuxNodelet  $(arg robot_name)_nodelet_manager">
     <rosparam param="yaml_cfg_data">
-      {
+      '{
         subscribers: [
           { name: "Safety Controller", topic: "input/safety",     timeout: 3.0, priority: 100 },
           { name: "Teleoperation",     topic: "input/teleop",     timeout: 1.0, priority: 25 },
           { name: "Navigation",        topic: "input/navigation", timeout: 1.0, priority: 1 }
         ],
         publisher: "output/cmd_vel"
-      }
+      }'
     </rosparam>
 
     <remap from="cmd_vel_mux/output/cmd_vel" to="$(arg robot_name)/commands/velocity"/>
-  </node>
-
-  <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_velocity_smoother"
-        args="load yocs_velocity_smoother/VelocitySmootherNodelet $(arg robot_name)_nodelet_manager" respawn="true" machine="$(arg robot_name)">
-    <rosparam file="$(find robot_bringup)/param/defaults/smoother.yaml" command="load"/>
-
-    <remap from="$(arg robot_name)_velocity_smoother/smooth_cmd_vel" to="$(arg robot_name)/commands/velocity"/>
-
-    <!-- Robot velocity feedbacks; use the default base configuration -->
-    <remap from="$(arg robot_name)_velocity_smoother/odometry"      to="$(arg robot_name)/odom"/>
-    <remap from="$(arg robot_name)_velocity_smoother/robot_cmd_vel" to="$(arg robot_name)/commands/velocity"/>
   </node>
 
   <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_safety_controller"

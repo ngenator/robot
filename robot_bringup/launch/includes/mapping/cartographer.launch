@@ -3,7 +3,7 @@
 
   <arg name="scan_topic" default="mobile_base/sensors/scan"/>
 
-  <node name="mapping" pkg="cartographer_ros" type="cartographer_node" args="-configuration_directory $(find robot)/config -configuration_basename cartographer.lua">
+  <node name="mapping" pkg="cartographer_ros" type="cartographer_node" args="-configuration_directory $(find robot_bringup)/config -configuration_basename cartographer.lua">
     <remap from="scan" to="$(arg scan_topic)"/>
     <remap from="odom" to="/$(arg robot_name)/odom"/>
   </node>

@@ -1,5 +1,6 @@
 <launch>
   <arg name="robot_name"   default="robot"/>
+  <arg name="cmd_vel_out"  default="/cmd_vel_mux/input/navigation"/>
   <arg name="localization" default="false"/>
 
   <include if="$(arg localization)" file="$(find robot_navigation)/launch/includes/amcl/rplidar.launch">
@@ -8,7 +9,8 @@
   </include>
 
   <include file="$(find robot_navigation)/launch/includes/velocity_smoother.launch">
-    <arg name="robot_name" value="$(arg robot_name)"/>
+    <arg name="robot_name"  value="$(arg robot_name)"/>
+    <arg name="cmd_vel_out" value="$(arg cmd_vel_out)"/>
   </include>
 
   <arg name="odom_frame_id"   default="odom"/>

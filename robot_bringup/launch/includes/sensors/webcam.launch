@@ -1,7 +1,7 @@
 <launch>
-  <arg name="machine" default="robot"/>
-  
-  <node name="webcam" pkg="usb_cam" type="usb_cam_node" machine="$(arg machine)">
+  <arg name="robot_name" default="robot"/>
+
+  <node name="webcam" pkg="usb_cam" type="usb_cam_node" respawn="true" machine="$(arg robot_name)">
     <param name="pixel_format" value="yuyv"/>
     <param name="image_width"  value="640"/>
     <param name="image_height" value="360"/>

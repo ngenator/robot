@@ -1,5 +1,4 @@
 local_costmap:
-  robot_radius: 0.20
   global_frame: /odom
   robot_base_frame: /base_footprint
   update_frequency: 5.0
