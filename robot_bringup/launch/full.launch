@@ -55,7 +55,7 @@
     <arg name="depth_topic"  value="$(arg robot_name)/sensors/camera/depth/points"/>
   </include>
 
-  <include file="$(find robot_navigation)/launch/exploration.launch">
+  <include if="$(arg localization)" file="$(find robot_navigation)/launch/exploration.launch">
     <arg name="scan_topic" value="$(arg robot_name)/sensors/scan"/>
   </include>
 </launch>
