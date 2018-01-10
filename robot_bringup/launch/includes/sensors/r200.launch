@@ -13,9 +13,10 @@
   <arg name="enable_ir"           default="false" />
   <arg name="enable_ir2"          default="false" />
   <arg name="enable_color"        default="true" />
-  <arg name="enable_pointcloud"   default="true" />
+  <arg name="enable_pointcloud"   default="false" />
   <arg name="enable_tf"           default="true" />
-  <arg name="enable_tf_dynamic"   default="true" />
+  <arg name="enable_tf_dynamic"   default="false" />
+  <arg name="enable_emitter"      default="false" />
 
   <arg name="tf_publication_rate" default="1.0" />
   <arg name="mode"                default="manual" />
@@ -42,6 +43,8 @@
   <param name="$(arg camera)/driver/depth_fps"           type="int"    value="$(arg depth_fps)" />
   <param name="$(arg camera)/driver/color_fps"           type="int"    value="$(arg color_fps)" />
   <!-- Refer to the Wiki http://wiki.ros.org/realsense_camera for list of supported parameters -->
+
+  <param name="$(arg camera)/driver/r200_emitter_enabled" value="$(arg enable_emitter)"/>
 
   <param name="$(arg camera)/color/image_raw/compressed/jpeg_quality" value="22"/>
 

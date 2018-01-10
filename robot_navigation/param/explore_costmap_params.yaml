@@ -33,15 +33,23 @@ explore_costmap:
     explore_clear_space: false
 
   sensor:
-    observation_sources: laser
+    observation_sources: laser bump
     laser:
       data_type: LaserScan
       clearing: true
       marking: true
       topic: scan
+      min_obstacle_height: -0.1
       inf_is_valid: true
       raytrace_range: 8.0
       obstacle_range: 8.0
+    bump:
+      data_type: PointCloud2
+      topic: bumper
+      marking: true
+      clearing: false
+      min_obstacle_height: -0.1
+      max_obstacle_height: 0.15
 
   inflation:
     inflation_radius: 0.5

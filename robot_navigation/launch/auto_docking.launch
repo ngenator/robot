@@ -1,0 +1,13 @@
+<launch>
+  <arg name="robot_name" default="robot"/>
+
+  <node pkg="nodelet" type="nodelet" name="dock_drive_manager" args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="dock_drive" args="load kobuki_auto_docking/AutoDockingNodelet dock_drive_manager">
+    <rosparam file="$(find kobuki_auto_docking)/param/auto_docking.yaml" command="load"/>
+    <remap from="dock_drive/odom"        to="$(arg robot_name)/odom"/>
+    <remap from="dock_drive/core"        to="$(arg robot_name)/sensors/core"/>
+    <remap from="dock_drive/dock_ir"     to="$(arg robot_name)/sensors/dock_ir"/>
+    <remap from="dock_drive/motor_power" to="$(arg robot_name)/commands/motor_power"/>
+    <remap from="dock_drive/velocity"    to="navigation_velocity_smoother/raw_cmd_vel"/>
+  </node>
+</launch>

@@ -3,9 +3,11 @@
   <arg name="robot_name"    default="robot"/>
   <arg name="robot_base"    default="kobuki"/>
   <arg name="mapper"        default="gmapping"/>
-  <arg name="localization"  default="false"/>
 
-  <machine name="$(arg robot_name)" address="$(arg robot_address)" env-loader="/opt/ros/kinetic/remote.sh" user="ngenator"/>
+  <arg name="localization" default="false"/>
+  <arg name="map_file"     default="/home/ngenator/office-2nd-floor.yaml"/>
+
+  <machine name="$(arg robot_name)" address="$(arg robot_address)" env-loader="/opt/ros/kinetic/remote.sh" user="ngenator" timeout="30"/>
 
   <!-- Robot Driver -->
   <include file="$(find robot_driver)/launch/$(arg robot_base).launch">
@@ -17,7 +19,7 @@
     <group ns="sensors">
       <include file="$(find robot_bringup)/launch/includes/sensors/rplidar.launch">
         <arg name="robot_name" value="$(arg robot_name)"/>
-        <arg name="motor_pwm"  value="100"/>
+        <arg name="motor_pwm"  value="600"/>
         <arg name="frame_id"   value="plate_middle_link"/> <!-- TODO update when the 3rd stack is added -->
       </include>
 
@@ -33,14 +35,21 @@
     </include>
   </group>
 
-  <include file="$(find robot_bringup)/launch/includes/mapping/$(arg mapper).launch">
+  <include unless="$(arg localization)" file="$(find robot_bringup)/launch/includes/mapping/$(arg mapper).launch">
     <arg name="robot_name" value="$(arg robot_name)"/>
     <arg name="scan_topic" value="$(arg robot_name)/sensors/scan"/>
   </include>
 
+  <include if="$(arg localization)" file="$(find robot_navigation)/launch/map_server.launch">
+    <arg name="robot_name" value="$(arg robot_name)"/>
+    <arg name="map_file"   value="$(arg map_file)"/>
+  </include>
+
   <include file="$(find robot_navigation)/launch/move_base.launch">
     <arg name="robot_name"   value="$(arg robot_name)"/>
-    <arg name="cmd_vel_out"  default="/cmd_vel_mux/input/navigation"/>
+    <arg name="cmd_vel_out"  value="/cmd_vel_mux/input/navigation"/>
+    <arg name="localization" value="$(arg localization)"/>
+    <arg name="odom_topic"   value="$(arg robot_name)/odom"/>
     <arg name="scan_topic"   value="$(arg robot_name)/sensors/scan"/>
     <arg name="bumper_topic" value="$(arg robot_name)/sensors/bumper"/>
     <arg name="depth_topic"  value="$(arg robot_name)/sensors/camera/depth/points"/>

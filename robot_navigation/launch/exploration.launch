@@ -1,6 +1,7 @@
 <launch>
-  <arg name="robot_name" default="robot"/>
-  <arg name="scan_topic" default="/robot/sensors/scan"/>
+  <arg name="robot_name"   default="robot"/>
+  <arg name="scan_topic"   default="/robot/sensors/scan"/>
+  <arg name="bumper_topic" default="/robot/sensors/bumper"/>
 
   <node pkg="frontier_exploration" type="explore_client" name="explore_client" machine="$(arg robot_name)"/>
 
@@ -10,7 +11,8 @@
 
     <rosparam file="$(find robot_navigation)/param/explore_costmap_params.yaml" command="load" />
 
-    <remap from="scan" to="$(arg scan_topic)"/>
+    <remap from="scan"   to="$(arg scan_topic)"/>
+    <remap from="bumper" to="$(arg bumper_topic)"/>
   </node>
 
 </launch>

@@ -31,11 +31,10 @@ Hotspot is running!
 INTERFACE: $IFACE
      SSID: $SSID
  PASSWORD: $PASSWORD
-"   
+"
     else
         echo "Couldn't activate hotspot"
     fi
-else 
+else
     echo "Hotspot is already active!"
 fi
-

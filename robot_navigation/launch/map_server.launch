@@ -1,0 +1,6 @@
+<launch>
+  <arg name="robot_name" default="robot"/>
+  <arg name="map_file"   default="$(find robot_navigation)/maps/office-2nd-floor.yaml"/>
+
+  <node pkg="map_server" type="map_server" name="map_server" args="$(arg map_file)" machine="$(arg robot_name)"/>
+</launch>

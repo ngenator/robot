@@ -37,13 +37,13 @@
 
   <!-- velocity commands multiplexer -->
   <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
-    args="load yocs_cmd_vel_mux/CmdVelMuxNodelet  $(arg robot_name)_nodelet_manager">
+    args="load yocs_cmd_vel_mux/CmdVelMuxNodelet  $(arg robot_name)_nodelet_manager" respawn="true" machine="$(arg robot_name)">
     <rosparam param="yaml_cfg_data">
       '{
         subscribers: [
-          { name: "Safety Controller", topic: "input/safety",     timeout: 3.0, priority: 100 },
-          { name: "Teleoperation",     topic: "input/teleop",     timeout: 1.0, priority: 25 },
-          { name: "Navigation",        topic: "input/navigation", timeout: 1.0, priority: 1 }
+          { name: "Safety Controller", topic: "input/safety",     timeout: 0.2, priority: 100 },
+          { name: "Teleoperation",     topic: "input/teleop",     timeout: 0.2, priority: 25 },
+          { name: "Navigation",        topic: "input/navigation", timeout: 0.2, priority: 1 }
         ],
         publisher: "output/cmd_vel"
       }'
