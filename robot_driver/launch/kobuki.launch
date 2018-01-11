@@ -1,13 +1,17 @@
 <launch>
   <arg name="robot_name" default="robot"/>
 
+  <arg name="manager" default="$(arg robot_name)_nodelet_manager"/>
+
   <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find turtlebot_description)/robots/kobuki_hexagons_r200.urdf.xacro'" />
   <param name="robot_description" command="$(arg urdf_file)" />
 
-  <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_nodelet_manager" args="manager" machine="$(arg robot_name)"/>
+  <node pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" machine="$(arg robot_name)"> 
+    <param name="num_worker_threads" value="4" />
+  </node>
 
   <node pkg="nodelet" type="nodelet" name="$(arg robot_name)"
-    args="load kobuki_node/KobukiNodelet $(arg robot_name)_nodelet_manager" machine="$(arg robot_name)">
+    args="load kobuki_node/KobukiNodelet $(arg manager)" machine="$(arg robot_name)">
     <rosparam command="load" file="$(find robot_driver)/param/kobuki/mobile_base.yaml"/>
   </node>
 
@@ -15,10 +19,10 @@
     <rosparam command="load" file="$(find robot_driver)/param/kobuki/diagnostics.yaml"/>
 
     <!-- Set the prefixes to remove using the robot_name arg -->
-    <rosparam param="analyzers/power/remove_prefix"       subst_value="true">$(arg robot_name)_nodelet_manager</rosparam>
-    <rosparam param="analyzers/kobuki/remove_prefix"      subst_value="true">$(arg robot_name)_nodelet_manager</rosparam>
-    <rosparam param="analyzers/sensors/remove_prefix"     subst_value="true">$(arg robot_name)_nodelet_manager</rosparam>
-    <rosparam param="analyzers/input_ports/remove_prefix" subst_value="true">$(arg robot_name)_nodelet_manager</rosparam>
+    <rosparam param="analyzers/power/remove_prefix"       subst_value="true">$(arg manager)</rosparam>
+    <rosparam param="analyzers/kobuki/remove_prefix"      subst_value="true">$(arg manager)</rosparam>
+    <rosparam param="analyzers/sensors/remove_prefix"     subst_value="true">$(arg manager)</rosparam>
+    <rosparam param="analyzers/input_ports/remove_prefix" subst_value="true">$(arg manager)</rosparam>
   </node>
 
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" machine="$(arg robot_name)">
@@ -28,7 +32,7 @@
   </node>
 
   <node ns="$(arg robot_name)" pkg="nodelet" type="nodelet" name="bumper_pointcloud"
-    args="load kobuki_bumper2pc/Bumper2PcNodelet $(arg robot_name)_nodelet_manager" machine="$(arg robot_name)">
+    args="load kobuki_bumper2pc/Bumper2PcNodelet $(arg manager)" machine="$(arg robot_name)">
       <param name="pointcloud_radius" type="double" value="0.24"/>
 
       <remap from="bumper_pointcloud/pointcloud"   to="$(arg robot_name)/sensors/bumper"/>
@@ -37,7 +41,7 @@
 
   <!-- velocity commands multiplexer -->
   <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
-    args="load yocs_cmd_vel_mux/CmdVelMuxNodelet  $(arg robot_name)_nodelet_manager" respawn="true" machine="$(arg robot_name)">
+    args="load yocs_cmd_vel_mux/CmdVelMuxNodelet  $(arg manager)" respawn="true" machine="$(arg robot_name)">
     <rosparam param="yaml_cfg_data">
       '{
         subscribers: [
@@ -53,7 +57,7 @@
   </node>
 
   <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_safety_controller"
-    args="load kobuki_safety_controller/SafetyControllerNodelet $(arg robot_name)_nodelet_manager" machine="$(arg robot_name)">
+    args="load kobuki_safety_controller/SafetyControllerNodelet $(arg manager)" machine="$(arg robot_name)">
     <remap from="$(arg robot_name)_safety_controller/cmd_vel"           to="cmd_vel_mux/input/safety"/>
     <remap from="$(arg robot_name)_safety_controller/events/bumper"     to="$(arg robot_name)/events/bumper"/>
     <remap from="$(arg robot_name)_safety_controller/events/cliff"      to="$(arg robot_name)/events/cliff"/>
