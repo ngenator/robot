@@ -31,9 +31,9 @@
     <remap from="joint_states" to="$(arg robot_name)/joint_states"/>
   </node>
 
-  <node ns="$(arg robot_name)" pkg="nodelet" type="nodelet" name="bumper_pointcloud"
+  <node pkg="nodelet" type="nodelet" name="bumper_pointcloud"
     args="load kobuki_bumper2pc/Bumper2PcNodelet $(arg manager)" machine="$(arg robot_name)">
-      <param name="pointcloud_radius" type="double" value="0.24"/>
+      <param name="pointcloud_radius" type="double" value="0.25"/>
 
       <remap from="bumper_pointcloud/pointcloud"   to="$(arg robot_name)/sensors/bumper"/>
       <remap from="bumper_pointcloud/core_sensors" to="$(arg robot_name)/sensors/core"/>
