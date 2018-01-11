@@ -17,6 +17,7 @@
     <param name="xmax"                type="double" value="1.0"/>
     <param name="ymax"                type="double" value="1.0"/>
     <param name="delta"               type="double" value="0.01"/>
+    <param name="odom_frame"          type="str"    value="odom"/>
 
     <remap from="scan" to="$(arg scan_topic)"/>
   </node>

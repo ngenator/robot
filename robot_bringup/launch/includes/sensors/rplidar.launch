@@ -22,4 +22,20 @@
     <remap from="scan"          to="scan_raw"/>
     <remap from="scan_filtered" to="scan"/>
   </node>
+
+  <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" machine="$(arg robot_name)">
+    <param name="output_frame"         type="str"    value="odom"/>
+    <param name="base_footprint_frame" type="str"    value="base_footprint"/>
+    <param name="freq"                 type="double" value="30.0"/>
+    <param name="sensor_timeout"       type="double" value="1.0"/>
+    <param name="odom_used"            type="bool"   value="true"/>
+    <param name="imu_used"             type="bool"   value="true"/>
+    <param name="vo_used"              type="bool"   value="false"/>
+    <param name="debug"                type="bool"   value="false"/>
+    <param name="self_diagnose"        type="bool"   value="false"/>
+
+    <remap from="odom"                         to="/robot/odom"/>
+    <remap from="imu/data"                     to="imu_data_raw"/>
+    <remap from="robot_pose_ekf/odom_combined" to="/robot/odom_combined"/>
+  </node>
 </launch>
