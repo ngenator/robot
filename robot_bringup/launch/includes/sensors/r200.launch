@@ -50,6 +50,12 @@
         <param name="serial_no"                type="str"  value="$(arg serial_no)" />
         <param name="usb_port_id"              type="str"  value="$(arg usb_port_id)" />
         <param name="camera_type"              type="str"  value="$(arg camera_type)" />
+        <param name="depth_width"              type="int"  value="$(arg depth_width)" />
+        <param name="depth_height"             type="int"  value="$(arg depth_height)" />
+        <param name="color_width"              type="int"  value="$(arg color_width)" />
+        <param name="color_height"             type="int"  value="$(arg color_height)" />
+        <param name="depth_fps"                type="int"  value="$(arg depth_fps)" />
+        <param name="color_fps"                type="int"  value="$(arg color_fps)" />
         <param name="base_frame_id"            type="str"  value="$(arg camera)_link" />
         <param name="depth_frame_id"           type="str"  value="$(arg camera)_depth_frame" />
         <param name="color_frame_id"           type="str"  value="$(arg camera)_rgb_frame" />
