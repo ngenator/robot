@@ -23,9 +23,9 @@
         <arg name="frame_id"   value="plate_middle_link"/> <!-- TODO update when the 3rd stack is added -->
       </include>
 
-      <!-- <include file="$(find robot_bringup)/launch/includes/sensors/r200.launch">
+      <include file="$(find robot_bringup)/launch/includes/sensors/r200.launch">
         <arg name="robot_name" value="$(arg robot_name)"/>
-      </include> -->
+      </include>
     </group>
 
     <!-- Teleop -->
