@@ -5,10 +5,11 @@ explore_costmap:
   update_frequency: 5.0
   publish_frequency: 5.0
 
-  #must match incoming static map
-  global_frame: /map
+  # must match incoming static map
+  # global_frame: /map
+  global_frame: /move_base/global_costmap/costmap
   robot_base_frame: /base_footprint
-  resolution: 0.01
+  resolution: 0.025
 
   rolling_window: false
   track_unknown_space: true
@@ -33,7 +34,7 @@ explore_costmap:
     explore_clear_space: false
 
   sensor:
-    observation_sources: laser bump
+    observation_sources: laser scan_2 bump
     laser:
       data_type: LaserScan
       clearing: true
@@ -43,6 +44,14 @@ explore_costmap:
       inf_is_valid: true
       raytrace_range: 8.0
       obstacle_range: 8.0
+    scan_2:
+      data_type: LaserScan
+      topic: /robot/sensors/camera/scan
+      marking: true
+      clearing: true
+      expected_update_rate: 1.75
+      min_obstacle_height: 0
+      max_obstacle_height: 0.32
     bump:
       data_type: PointCloud2
       topic: bumper

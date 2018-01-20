@@ -7,3 +7,9 @@ teleop:
     message_type: geometry_msgs/Twist
     topic_name: cmd_vel
     type: topic
+  cancel_navigation:
+    axis_mappings: []
+    deadman_buttons: [1]
+    message_type: actionlib_msgs/GoalID
+    topic_name: /move_base/cancel
+    type: topic

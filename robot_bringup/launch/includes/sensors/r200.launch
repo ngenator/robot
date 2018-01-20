@@ -28,7 +28,7 @@
   <arg name="load_driver"     default="true" />
   <arg name="publish_tf"      default="true" />
 
-  <arg name="emitter_enabled" default="false"/>
+  <arg name="emitter_enabled" default="true"/>
   
   <param name="$(arg camera)/driver/r200_emitter_enabled" value="$(arg emitter_enabled)"/>
 
@@ -62,6 +62,11 @@
         <param name="ir2_optical_frame_id"     type="str"  value="$(arg camera)_ir2_optical_frame" />
         <param name="fisheye_optical_frame_id" type="str"  value="$(arg camera)_fisheye_optical_frame" />
         <param name="imu_optical_frame_id"     type="str"  value="$(arg camera)_imu_optical_frame" />
+      </node>
+
+      <!-- Generate a fake laserscan from the depth image -->
+      <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan" machine="$(arg robot_name)">
+        <remap from="image" to="depth/image_raw"/>
       </node>
     </group>
 
