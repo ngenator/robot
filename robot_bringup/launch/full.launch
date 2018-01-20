@@ -38,7 +38,7 @@
   <!-- TODO move maps onto the robot -->
   <include unless="$(arg localization)" file="$(find robot_bringup)/launch/includes/mapping/$(arg mapper).launch">
     <arg name="robot_name" value="$(arg robot_name)"/>
-    <arg name="scan_topic" value="$(arg robot_name)/sensors/scan"/>
+    <arg name="scan_topic" value="$(arg robot_name)/sensors/laser/scan"/>
   </include>
 
   <include if="$(arg localization)" file="$(find robot_navigation)/launch/map_server.launch">
@@ -51,7 +51,7 @@
     <arg name="cmd_vel_out"  value="/cmd_vel_mux/input/navigation"/>
     <arg name="localization" value="$(arg localization)"/>
     <arg name="odom_topic"   value="$(arg robot_name)/odom"/>
-    <arg name="scan_topic"   value="$(arg robot_name)/sensors/scan"/>
+    <arg name="scan_topic"   value="$(arg robot_name)/sensors/laser/scan"/>
     <arg name="bumper_topic" value="$(arg robot_name)/sensors/bumper"/>
     <arg name="depth_topic"  value="$(arg robot_name)/sensors/camera/depth/points"/>
   </include>

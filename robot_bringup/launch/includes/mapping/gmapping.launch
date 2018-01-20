@@ -1,7 +1,7 @@
 <launch>
   <arg name="robot_name" default="robot"/>
 
-  <arg name="scan_topic" default="/mobile_base/sensors/scan_filtered"/>
+  <arg name="scan_topic" default="robot/sensors/laser/scan"/>
 
   <node name="mapping" pkg="gmapping"  type="slam_gmapping" machine="$(arg robot_name)">
   <!-- <node name="mapping" pkg="gmapping"  type="slam_gmapping"> -->

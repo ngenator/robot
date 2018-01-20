@@ -1,6 +1,6 @@
 <launch>
   <arg name="robot_name" default="robot"/>
-  <arg name="scan_topic" default="robot/sensors/scan"/>
+  <arg name="scan_topic" default="robot/sensors/laser/scan"/>
 
   <node pkg="slam_karto" type="slam_karto" name="mapping" output="screen" machine="$(arg robot_name)">
     <rosparam command="load" file="$(find robot_bringup)/param/mapping/karto.yaml" />

@@ -22,7 +22,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: Scan
+    SyncSource: Camera Scan
   - Class: rviz/Displays
     Help Height: 0
     Name: Displays
@@ -96,6 +96,8 @@ Visualization Manager:
           Value: true
         gyro_link:
           Value: true
+        laser:
+          Value: true
         map:
           Value: true
         odom:
@@ -157,6 +159,9 @@ Visualization Manager:
                     bracket_end_left:
                       {}
                     camera_link:
+                      camera_depth_frame:
+                        camera_depth_optical_frame:
+                          {}
                       camera_ir2_frame:
                         camera_ir2_optical_frame:
                           {}
@@ -164,9 +169,6 @@ Visualization Manager:
                         camera_ir_optical_frame:
                           {}
                       camera_rgb_frame:
-                        camera_depth_frame:
-                          camera_depth_optical_frame:
-                            {}
                         camera_rgb_optical_frame:
                           {}
                 caster_back_link:
@@ -184,7 +186,8 @@ Visualization Manager:
                 plate_bottom_link:
                   {}
                 plate_middle_link:
-                  {}
+                  laser:
+                    {}
                 plate_top_link:
                   {}
                 pole_bottom_0_link:
@@ -472,7 +475,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.00999999978
       Style: Flat Squares
-      Topic: /robot/sensors/scan_raw
+      Topic: /robot/sensors/laser/scan_raw
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -489,7 +492,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 47
@@ -502,7 +505,37 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.00999999978
       Style: Flat Squares
-      Topic: /robot/sensors/scan
+      Topic: /robot/sensors/laser/scan
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 0.294154376
+        Min Value: 0.294154376
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/LaserScan
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: Camera Scan
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /robot/sensors/camera/scan
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -662,14 +695,14 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
+        Max Value: 1.35437107
+        Min Value: 0.00303721428
         Value: true
       Axis: Z
       Channel Name: intensity
       Class: rviz/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: RGB8
+      Color Transformer: AxisColor
       Decay Time: 0
       Enabled: false
       Invert Rainbow: false
@@ -799,7 +832,7 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Scale: 49.9361839
+      Scale: 77.6903839
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
       X: -0.112565637

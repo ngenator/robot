@@ -1,6 +1,6 @@
 <launch>
   <arg name="robot_name"   default="robot"/>
-  <arg name="scan_topic"   default="/robot/sensors/scan"/>
+  <arg name="scan_topic"   default="/robot/sensors/laser/scan"/>
   <arg name="bumper_topic" default="/robot/sensors/bumper"/>
 
   <node pkg="frontier_exploration" type="explore_client" name="explore_client" machine="$(arg robot_name)"/>

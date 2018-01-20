@@ -1,7 +1,7 @@
 <launch>
   <arg name="robot_name" default="robot"/>
 
-  <arg name="scan_topic" default="mobile_base/sensors/scan"/>
+  <arg name="scan_topic" default="mobile_base/sensors/laser/scan"/>
 
   <node name="mapping" pkg="cartographer_ros" type="cartographer_node" args="-configuration_directory $(find robot_bringup)/config -configuration_basename cartographer.lua">
     <remap from="scan" to="$(arg scan_topic)"/>
