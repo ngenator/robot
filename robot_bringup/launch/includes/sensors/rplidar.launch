@@ -10,6 +10,7 @@
     <!-- Publish transorm that links the laser to the plate it sits on. Rotated 180 degrees around the x axis and raised 3 cm -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="laser_tf" args="0 0 0.03 3.14159265359 0 0 $(arg frame_id) laser"  machine="$(arg robot_name)"/> 
 
+    <!-- Laser sensor node -->
     <node pkg="rplidar_ros" type="rplidarNode" name="rplidar" respawn="true" machine="$(arg robot_name)">
       <param name="serial_port"         type="string" value="$(arg serial_port)"/>
       <param name="serial_baudrate"     type="int"    value="115200"/>
@@ -21,6 +22,7 @@
       <remap from="scan" to="scan_raw"/>
     </node>
 
+    <!-- Laser filter, to remove scan points within the robot's footprint -->
     <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter" machine="$(arg robot_name)">
       <rosparam command="load" file="$(find robot_bringup)/param/sensors/rplidar.yaml" />
 
