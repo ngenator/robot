@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+export ROBOT_ADDRESS="${1:-10.42.0.138}"
+export PORT="${2:-22}"
+
+echo "Waiting for port ${PORT} on ${ROBOT_ADDRESS}..."
+
+while ! nc -z ${ROBOT_ADDRESS} ${PORT}; do
+  sleep 1
+done
+
+echo "Ready!"
