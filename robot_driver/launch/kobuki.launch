@@ -67,14 +67,14 @@
     <remap from="$(arg robot_name)_safety_controller/events/wheel_drop" to="$(arg robot_name)/events/wheel_drop"/>
   </node>
 
-  <node pkg="nodelet" type="nodelet" name="dock_drive" 
-    args="load kobuki_auto_docking/AutoDockingNodelet dock_drive_manager" machine="$(arg robot_name)">
+  <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_dock_drive" 
+    args="load kobuki_auto_docking/AutoDockingNodelet $(arg manager)" machine="$(arg robot_name)">
     <rosparam file="$(find kobuki_auto_docking)/param/auto_docking.yaml" command="load"/>
     
-    <remap from="dock_drive/odom"        to="$(arg robot_name)/odom"/>
-    <remap from="dock_drive/core"        to="$(arg robot_name)/sensors/core"/>
-    <remap from="dock_drive/dock_ir"     to="$(arg robot_name)/sensors/dock_ir"/>
-    <remap from="dock_drive/motor_power" to="$(arg robot_name)/commands/motor_power"/>
-    <remap from="dock_drive/velocity"    to="cmd_vel_mux/input/docking"/>
+    <remap from="$(arg robot_name)_dock_drive/odom"        to="$(arg robot_name)/odom"/>
+    <remap from="$(arg robot_name)_dock_drive/core"        to="$(arg robot_name)/sensors/core"/>
+    <remap from="$(arg robot_name)_dock_drive/dock_ir"     to="$(arg robot_name)/sensors/dock_ir"/>
+    <remap from="$(arg robot_name)_dock_drive/motor_power" to="$(arg robot_name)/commands/motor_power"/>
+    <remap from="$(arg robot_name)_dock_drive/velocity"    to="cmd_vel_mux/input/docking"/>
   </node>
 </launch>
