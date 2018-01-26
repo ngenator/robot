@@ -22,8 +22,11 @@
   <arg name="color_fps"       default="30" />
 
   <!-- Arguments for remapping all device namespaces -->
-  <arg name="depth"           default="depth" />
-  <arg name="rgb"             default="color" />
+  <arg name="depth_registered"          default="depth_registered" />
+  <arg name="depth_registered_filtered" default="depth_registered" />
+  <arg name="depth"                     default="depth" />
+  <arg name="rgb"                       default="rgb" />
+  <arg name="ir"                        default="ir" />
 
   <!-- Optionally suppress loading the driver nodelet. Useful while playing back recorded raw data from a bag.-->
   <arg name="load_driver"     default="true" />
@@ -50,7 +53,13 @@
         <param name="serial_no"                type="str"  value="$(arg serial_no)" />
         <param name="usb_port_id"              type="str"  value="$(arg usb_port_id)" />
         <param name="camera_type"              type="str"  value="$(arg camera_type)" />
-        <param name="mode"                     type="str"  value="$(arg mode)" />        
+        <param name="mode"                     type="str"  value="$(arg mode)" />
+        <param name="enable_tf"                type="bool" value="true" />
+        <param name="enable_depth"             type="bool" value="true" />
+        <param name="enable_color"             type="bool" value="true" />
+        <param name="enable_ir"                type="bool" value="true" />
+        <param name="enable_ir2"               type="bool" value="true" />
+        <param name="enable_pointcloud"        type="bool" value="false" />      
         <param name="depth_width"              type="int"  value="$(arg depth_width)" />
         <param name="depth_height"             type="int"  value="$(arg depth_height)" />
         <param name="color_width"              type="int"  value="$(arg color_width)" />
@@ -70,6 +79,9 @@
         <param name="ir2_optical_frame_id"     type="str"  value="$(arg camera)_ir2_optical_frame" />
         <param name="fisheye_optical_frame_id" type="str"  value="$(arg camera)_fisheye_optical_frame" />
         <param name="imu_optical_frame_id"     type="str"  value="$(arg camera)_imu_optical_frame" />
+
+        <remap from="depth"    to="$(arg depth)" />
+        <remap from="color"    to="$(arg rgb)" />
       </node>
 
       <!-- Generate a fake laserscan from the depth image -->
@@ -77,13 +89,6 @@
         <remap from="image" to="$(arg depth)/image_raw"/>
       </node>
     </group>
-
-    <!-- Color rectified image -->
-    <node pkg="nodelet" type="nodelet" name="$(arg rgb)_rectify_color" machine="$(arg robot_name)"
-          args="load image_proc/rectify $(arg manager)">
-      <remap from="image_mono" to="$(arg rgb)/image_raw" />
-      <remap from="image_rect" to="$(arg rgb)/image_rect_color" />
-    </node>
 
     <!-- Rectified raw image (internal use) -->
     <node pkg="nodelet" type="nodelet" name="$(arg depth)_rectify_depth" machine="$(arg robot_name)"
@@ -102,11 +107,39 @@
       <remap from="image"     to="$(arg depth)/image_rect" />
     </node>
 
-    <!-- XYZ point cloud -->
-    <node pkg="nodelet" type="nodelet" name="$(arg depth)_points" machine="$(arg robot_name)"
-          args="load depth_image_proc/point_cloud_xyz $(arg manager)">
-      <remap from="image_rect" to="$(arg depth)/image_rect_raw"/>  <!-- Use raw image for efficiency -->
-      <remap from="points"     to="$(arg depth)/points" />
+    <!-- Unrectified depth image -->
+    <node pkg="nodelet" type="nodelet" name="$(arg depth)_metric" machine="$(arg robot_name)"
+          args="load depth_image_proc/convert_metric $(arg manager)">
+      <remap from="image_raw" to="$(arg depth)/image_raw" />
+      <remap from="image"     to="$(arg depth)/image" />
     </node>
-  </group>
+
+    <node pkg="nodelet" type="nodelet" name="register_$(arg depth)_$(arg rgb)" machine="$(arg robot_name)"
+          args="load depth_image_proc/register $(arg manager)">
+      <remap from="rgb/camera_info"             to="$(arg rgb)/camera_info" />
+      <remap from="depth/camera_info"           to="$(arg depth)/camera_info" />
+      <remap from="depth/image_rect"            to="$(arg depth)/image_rect_raw" />
+      <remap from="depth_registered/image_rect" to="$(arg depth_registered)/sw_registered/image_rect_raw" />
+    </node>
+
+    <!-- Publish registered XYZRGB point cloud with software registered input -->
+    <node pkg="nodelet" type="nodelet" name="points_xyzrgb_sw_registered" machine="$(arg robot_name)"
+          args="load depth_image_proc/point_cloud_xyzrgb $(arg manager)">
+      <!-- Explicit topic remappings, shouldn't need all of these -->
+      <remap from="rgb/image_rect_color"        to="$(arg rgb)/image_rect_color" />
+      <remap from="rgb/camera_info"             to="$(arg rgb)/camera_info" />
+      <remap from="depth_registered/image_rect" to="$(arg depth_registered_filtered)/sw_registered/image_rect_raw" />
+      <remap from="depth_registered/points"     to="$(arg depth_registered)/points" />
+    </node>
+
+    <!-- Rectified depth image -->
+    <node pkg="nodelet" type="nodelet" name="$(arg depth_registered)_sw_metric_rect" machine="$(arg robot_name)"
+      args="load depth_image_proc/convert_metric $(arg manager)">
+      <remap from="image_raw" to="$(arg depth_registered)/sw_registered/image_rect_raw" />
+      <remap from="image"     to="$(arg depth_registered)/sw_registered/image_rect" />
+    </node>
+
+    <!-- Move the camera off the bracket and onto the front of the middle plate -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="camera_tf" args="0.135 -0.06 -0.022 0 0 0 plate_middle_link camera_link"  machine="$(arg robot_name)"/>
+  </group>  
 </launch>
