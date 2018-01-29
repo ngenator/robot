@@ -1,5 +1,6 @@
+tf_message_filter_target_frame: laser
 scan_filter_chain:
-- name: range
+- name: base_footprint
   type: laser_filters/LaserScanRangeFilter
   params:
     use_message_range_limits: false
