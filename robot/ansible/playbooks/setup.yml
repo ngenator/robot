@@ -1,0 +1,13 @@
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: dump hostvars
+      debug:
+        var: hostvars[inventory_hostname]
+        verbosity: 2
+  roles:
+    - avahi
+
+- hosts: controller
+  roles:
+    - realsense2

@@ -1,0 +1,3 @@
+avahi_domain: ngenator.local
+avahi_extra_domains:
+  - local
