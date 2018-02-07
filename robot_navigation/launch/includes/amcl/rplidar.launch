@@ -1,7 +1,6 @@
 <launch>
   <arg name="robot_name" default="robot"/>
 
-  <!-- Updated version tuned with support for Intel(R) RealSense R200 3d camera, copied from amcl.launch.xml file (turtlebot_navigation) -->
   <arg name="use_map_topic"   default="true"/>
   <arg name="scan_topic"      default="scan"/>
   <arg name="initial_pose_x"  default="0.0"/>

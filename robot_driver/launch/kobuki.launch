@@ -3,7 +3,7 @@
 
   <arg name="manager" default="$(arg robot_name)_nodelet_manager"/>
 
-  <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find turtlebot_description)/robots/kobuki_hexagons_r200.urdf.xacro'" />
+  <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find robot_description)/robots/kobuki_hexagons_r200.urdf.xacro'" />
   <param name="robot_description" command="$(arg urdf_file)" />
 
   <node pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" machine="$(arg robot_name)"> 

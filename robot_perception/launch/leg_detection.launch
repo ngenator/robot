@@ -1,0 +1,10 @@
+<launch>
+  <arg name="robot_address" default="10.42.0.138"/>
+  <arg name="robot_name"    default="robot"/>
+  <arg name="robot_base"    default="kobuki"/>
+
+  <machine name="$(arg robot_name)" address="$(arg robot_address)" env-loader="/opt/ros/kinetic/remote.sh" user="ngenator" timeout="30" default="true"/>
+
+  <node pkg="cob_leg_detection" type="leg_detection" name="leg_detection" args="scan:=/robot/sensors/laser/scan
+ $(find cob_leg_detection)/config/trained_leg_detector.yaml" output="screen" machine="$(arg robot_name)"/>
+</launch>
