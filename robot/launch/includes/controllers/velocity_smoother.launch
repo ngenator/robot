@@ -4,7 +4,7 @@
     <remap from="teleop_velocity_smoother/smooth_cmd_vel" to="cmd_vel_mux/input/teleop"/>
 
     <!-- Robot velocity feedbacks; use the one configured as base default -->
-    <remap from="teleop_velocity_smoother/odometry" to="odom"/>
+    <remap from="teleop_velocity_smoother/odometry"      to="odom"/>
     <remap from="teleop_velocity_smoother/robot_cmd_vel" to="mobile_base/commands/velocity"/>
   </node>
 </launch>

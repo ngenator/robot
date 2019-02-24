@@ -1,14 +1,15 @@
 - name: install realsense packages
+  become: true
   block:
   - name: add intel signing key
     apt_key:
       keyserver: keys.gnupg.net
-      id: 7DCC6F0F
+      id: 6F3EFCDE
 
   - name: add intel realsense repo
     apt_repository:
-      repo: deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo xenial main
-      filename: 'realsense-public'
+      repo: "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo {{ ansible_distribution_release }} main"
+      filename: realsense-public
       state: present
       update_cache: yes
 
@@ -18,6 +19,5 @@
       state: latest
       allow_unauthenticated: yes
     with_items:
-      - realsense-uvcvideo
+      - librealsense2-dkms
       - librealsense2-utils
-  become: true
