@@ -7,7 +7,3 @@
         verbosity: 2
   roles:
     - avahi
-
-- hosts: controller
-  roles:
-    - realsense2

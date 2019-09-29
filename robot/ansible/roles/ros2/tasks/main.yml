@@ -1,0 +1,28 @@
+---
+- name: setup locale
+  locale_gen:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - en_US
+  - en_US.UTF-8
+
+- name: install dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - curl
+  - gnupg2
+  - lsb-release
+
+- name: add the ROS signing key
+  apt_key:
+    url: https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc
+    state: present
+
+- name: add the ROS repository
+- apt_repository:
+    repo: "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu {{ ansible_distribution_release }} main"
+    state: present
+    filename: ros2-latest
