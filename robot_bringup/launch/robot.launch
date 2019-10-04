@@ -1,0 +1,20 @@
+<launch>
+  <arg name="robot_address" default="192.168.98.234"/>
+  <arg name="robot_user"    default="ngenator"/>
+
+  <arg name="enable_lidar" default="false"/>
+  <arg name="enable_depth" default="false"/>
+
+  <machine name="robot" address="$(arg robot_address)" user="$(arg robot_user)" default="true"/>
+
+  <group>
+    <!-- Start the driver for the mobile base -->
+    <include file="$(find robot_bringup)/launch/includes/robot/mobile_base.launch"/>
+
+    <!-- Additional sensors: enable_lidar, enable_depth -->
+    <group>
+      <include if="$(arg enable_lidar)" file="$(find robot_bringup)/launch/includes/mobile_base/sensors/rplidar.launch"/>
+      <include if="$(arg enable_depth)" file="$(find robot_bringup)/launch/includes/mobile_base/sensors/d435.launch"/>
+    </group>
+  </group>
+</launch>

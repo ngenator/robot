@@ -1,0 +1,8 @@
+teleop:
+  drive:
+    axis_mappings: # for steam controller
+    - {axis: 1, offset: 0.0, scale: 0.75, target: linear.x} # left stick up/down
+    - {axis: 0, offset: 0.0, scale: 1.1, target: angular.z} # left stick left/right
+    message_type: geometry_msgs/Twist
+    topic_name: mobile_base/commands/velocity
+    type: topic

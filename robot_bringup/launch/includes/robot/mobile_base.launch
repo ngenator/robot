@@ -1,0 +1,11 @@
+<launch>
+  <node pkg="nodelet" type="nodelet" name="velocity_smoother" args="load yocs_velocity_smoother/VelocitySmootherNodelet mobile_base_nodelet_manager" machine="robot">
+    <rosparam file="$(find robot_bringup)/params/mobile_base/velocity_smoother.yaml" command="load" />
+
+    <remap from="velocity_smoother/smooth_cmd_vel" to="mobile_base/commands/velocity/input/teleop" />
+
+    <!-- Robot velocity feedbacks; use the one configured as base default -->
+    <remap from="velocity_smoother/odometry"      to="odom" />
+    <remap from="velocity_smoother/robot_cmd_vel" to="mobile_base/commands/velocity" />
+  </node>
+</launch>>

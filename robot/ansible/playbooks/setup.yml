@@ -5,5 +5,3 @@
       debug:
         var: hostvars[inventory_hostname]
         verbosity: 2
-  roles:
-    - avahi

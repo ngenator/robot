@@ -1,0 +1,28 @@
+<launch>
+  <arg name="serial_port" default="/dev/input/js1"/>
+
+  <rosparam file="$(find robot_bringup)/params/controller/joystick.yaml" command="load" />
+
+  <!--JOYSTICK NODE -->
+  <node pkg="joy" type="joy_node" name="joystick" respawn="true">
+    <param name="dev"               type="string" value="$(arg serial_port)"/>
+    <param name="deadzone"          type="double" value="0.05"/>
+    <param name="coalesce_interval" type="double" value="0.001"/>
+    <param name="autorepeat_rate"   type="int"    value="10"/>
+  </node>
+
+  <!-- JOYSTICK TELEOP NODE -->
+  <node pkg="joy_teleop" type="joy_teleop.py" name="joystick_teleop" respawn="true">
+    <remap from="cmd_vel" to="controller/commands/velocity"/>
+  </node>
+
+  <node pkg="nodelet" type="nodelet" name="joy_velocity_smoother" args="load yocs_velocity_smoother/VelocitySmootherNodelet controller_nodelet_manager" machine="robot">
+    <rosparam file="$(find robot_bringup)/params/controller/velocity_smoother.yaml" command="load" />
+
+    <remap from="joy_velocity_smoother/smooth_cmd_vel" to="controller/commands/velocity" />
+
+    <!-- Robot velocity feedbacks; use the one configured as base default -->
+    <remap from="joy_velocity_smoother/odometry"      to="odom" />
+    <remap from="joy_velocity_smoother/robot_cmd_vel" to="mobile_base/commands/velocity" />
+  </node>
+</launch>

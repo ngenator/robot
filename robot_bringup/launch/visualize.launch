@@ -1,6 +1,0 @@
-<launch>
-  <arg name="robot_base" default="kobuki"/>
-  
-  <!-- Rviz is split out from full launch because it often crashes on startup with libgl errors -->
-  <node name="visualizer" pkg="rviz" type="rviz" args="-d $(find robot_bringup)/rviz/$(arg robot_base).rviz -f odom"/>
-</launch>

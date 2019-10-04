@@ -1,3 +1,0 @@
-avahi_domain: robot.local
-avahi_extra_domains:
-  - local
