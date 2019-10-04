@@ -20,10 +20,9 @@
 
   - name: install realsense packages
     apt:
-      name: "{{ item }}"
+      name: 
+        - librealsense2-dkms
+        - librealsense2-utils
+        - librealsense2-dev
       state: latest
       allow_unauthenticated: yes
-    with_items:
-      - librealsense2-dkms
-      - librealsense2-utils
-      - librealsense2-dev

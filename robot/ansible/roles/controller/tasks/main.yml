@@ -1,0 +1,3 @@
+- name: setup controller
+  block:
+    - debug: msg="TODO - configure controller"

@@ -1,5 +1,0 @@
----
-ros_distribution: kinetic
-ros_configuration: desktop-full
-ros_packages: 
-  - rqt

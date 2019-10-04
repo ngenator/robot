@@ -1,5 +1,3 @@
 ---
 ros_configuration: ros-base
 ros_packages:
-  - kobuki
-  - kobuki-core

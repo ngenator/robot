@@ -1,2 +1,3 @@
 ---
 ros_configuration: desktop-full
+ros_packages:

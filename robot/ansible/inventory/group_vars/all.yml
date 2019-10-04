@@ -1,0 +1,8 @@
+---
+ros_user: 
+  name: ngenator
+  group: ngenator
+
+ros_distribution: melodic
+ros_common_packages:
+  - kobuki-core

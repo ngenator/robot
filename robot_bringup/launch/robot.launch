@@ -5,7 +5,7 @@
   <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find robot_description)/robots/kobuki_hexagons_r200.urdf.xacro'"/>
   <param name="robot_description" command="$(arg urdf_file)"/>
 
-  <machine name="robot" address="$(arg robot_address)" user="$(arg robot_user)" default="true"/>
+  <machine name="robot" address="$(arg robot_address)" user="$(arg robot_user)" env-loader="/opt/ros/env.sh" default="true"/>
 
   <group>
     <!-- Start the driver for the mobile base -->

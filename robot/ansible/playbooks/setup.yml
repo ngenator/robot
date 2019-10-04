@@ -1,7 +1,27 @@
 - hosts: all
   gather_facts: true
   tasks:
-    - name: dump hostvars
-      debug:
-        var: hostvars[inventory_hostname]
-        verbosity: 2
+    # - debug: var=hostvars[inventory_hostname]
+    - debug: var=ansible_default_ipv4.address
+    
+    - name: add ROS_IP env variable
+      lineinfile:
+        path: /home/ngenator/.bashrc
+        regexp: '^export ROS_IP'
+        line: 'export ROS_IP="{{ ansible_default_ipv4.address }}"'
+        owner: "{{ ros_user.name }}"
+        group: "{{ ros_user.group }}"
+
+- hosts: controller
+  roles:
+    - controller
+
+- hosts: mobile_base
+  roles:
+    - mobile_base
+  tasks:
+#     - name: install ros packages
+#       package:
+#         name: "ros-{{ ros_distribution }}-{{ item }}"
+#         state: present
+#       with_items: "{{ ros_packages }}"
