@@ -3,6 +3,15 @@
 
   <rosparam file="$(find robot_bringup)/params/controller/joystick.yaml" command="load" />
 
+  <arg name="urdf_file" default="$(find xacro)/xacro '$(find robot_description)/robots/kobuki_hexagons_r200.urdf.xacro'"/>
+  <param name="robot_description" command="$(arg urdf_file)"/>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" machine="robot">
+    <param name="publish_frequency" type="double" value="30.0"/>
+  </node>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" machine="robot"/>
+
   <!--JOYSTICK NODE -->
   <node pkg="joy" type="joy_node" name="joystick" respawn="true">
     <param name="dev"               type="string" value="$(arg serial_port)"/>

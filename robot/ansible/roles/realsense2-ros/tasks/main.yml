@@ -6,12 +6,12 @@
         dest: /home/{{ ros_user.name }}/catkin_ws/src/realsense-ros
         version: 2.2.8
     
-    - name: build the packages
-      shell: catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
-      args:
-        chdir: /home/{{ ros_user.name }}/catkin_ws
+    # - name: build the packages
+    #   shell: catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
+    #   args:
+    #     chdir: /home/{{ ros_user.name }}/catkin_ws
         
-    - name: install the packages
-      shell: catkin_make install
-      args:
-        chdir: /home/{{ ros_user.name }}/catkin_ws
+    # - name: install the packages
+    #   shell: catkin_make install
+    #   args:
+    #     chdir: /home/{{ ros_user.name }}/catkin_ws

@@ -5,6 +5,6 @@
       template:
         src: templates/env.sh
         dest: /opt/ros/env.sh
-        mode: '0644'
+        mode: '0755'
         owner: "{{ ros_user.name }}"
         group: "{{ ros_user.group }}"

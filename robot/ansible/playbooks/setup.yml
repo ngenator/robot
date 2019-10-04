@@ -19,9 +19,4 @@
 - hosts: mobile_base
   roles:
     - mobile_base
-  tasks:
-#     - name: install ros packages
-#       package:
-#         name: "ros-{{ ros_distribution }}-{{ item }}"
-#         state: present
-#       with_items: "{{ ros_packages }}"
+  
