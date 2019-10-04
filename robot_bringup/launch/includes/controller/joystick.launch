@@ -22,7 +22,7 @@
     <remap from="joy_velocity_smoother/smooth_cmd_vel" to="controller/commands/velocity" />
 
     <!-- Robot velocity feedbacks; use the one configured as base default -->
-    <remap from="joy_velocity_smoother/odometry"      to="odom" />
+    <remap from="joy_velocity_smoother/odometry"      to="mobile_base/odom" />
     <remap from="joy_velocity_smoother/robot_cmd_vel" to="mobile_base/commands/velocity" />
   </node>
 </launch>
