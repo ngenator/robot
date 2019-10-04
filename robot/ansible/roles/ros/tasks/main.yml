@@ -1,0 +1,5 @@
+- name: install ros packages
+  become: true
+  apt:
+    name: "{{ ros_packages | map('regex_replace', '(.*)', 'ros-' + ros_distribution + '-\\1') | list }}"
+    state: present

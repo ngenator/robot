@@ -1,3 +1,4 @@
 ---
 ros_configuration: ros-base
 ros_packages:
+  - rtabmap-ros
