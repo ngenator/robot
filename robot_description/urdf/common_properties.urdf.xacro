@@ -83,4 +83,9 @@
       <color rgba="1.0 0.7 0.0 1"/>
     </material>
   </xacro:property>
+  <xacro:property name="material_aluminum">
+    <material name="aluminum">
+	    <color rgba="0.5 0.5 0.5 1"/>
+    </material>
+  </xacro:property>
 </robot>

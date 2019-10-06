@@ -26,8 +26,8 @@
 
     <!-- Additional sensors: enable_lidar, enable_depth -->
     <group>
-      <include if="$(arg enable_lidar)" file="$(find robot_bringup)/launch/includes/mobile_base/sensors/rplidar.launch"/>
-      <include if="$(arg enable_depth)" file="$(find robot_bringup)/launch/includes/mobile_base/sensors/d435.launch"/>
+      <include file="$(find robot_bringup)/launch/includes/robot/sensors/rplidar.launch"/>
+      <include file="$(find robot_bringup)/launch/includes/robot/sensors/d435.launch"/>
     </group>
   </group>
 </launch>
