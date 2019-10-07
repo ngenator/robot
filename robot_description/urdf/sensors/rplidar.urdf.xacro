@@ -1,42 +1,43 @@
 <?xml version="1.0"?>
 
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:macro name="rplidar_model" params="name parent *origin">
-      <joint name="${name}_joint" type="fixed">
-        <xacro:insert_block name="origin" />
-        <parent link="${parent}"/>
-        <child link="${name}_frame"/>
-      </joint>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find robot_description)/urdf/common_properties.urdf.xacro"/>
 
-      <link name="${name}_frame">
-        <inertial>
-          <mass value="0.270" />
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <inertia ixx="2.632e-4" ixy="0" ixz="0" 
-                   iyy="2.632e-4" iyz="0" 
-                   izz="1.62e-4" />
-        </inertial>
-        <visual>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-          <mesh filename="package://robot_description/meshes/rplidar_a2.stl"/>
+  <xacro:macro name="rplidar_model" params="name parent *origin">
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${name}_frame"/>
+    </joint>
+
+    <link name="${name}_frame">
+      <inertial>
+        <mass value="0.270" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="2.632e-4" ixy="0" ixz="0" 
+                 iyy="2.632e-4" iyz="0" 
+                 izz="1.62e-4" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 1.5708" />
+        <geometry>
+          <mesh filename="package://robot_description/meshes/sensors/rplidar_a2.stl"/>
         </geometry>
-        </visual>
-        <collision>
-          <origin xyz="0 0 -0.0115" rpy="0 0 0" />
-          <geometry>
+        <xacro:insert_block name="material_dark_grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 -0.0115" rpy="0 0 0" />
+        <geometry>
           <box size="0.058 0.058 0.087" />
         </geometry>
-        </collision>
-      </link>
-    </xacro:macro>
+      </collision>
+    </link>
+  </xacro:macro>
 
-    <xacro:macro name="rplidar" params="name parent *origin ros_topic update_rate ray_count min_angle max_angle">
-      <xacro:rplidar_model name="${name}" parent="${parent}">
-        <xacro:insert_block name="origin" />
-      </xacro:rplidar_model>
-    </xacro:macro>
-  
-   
+  <xacro:macro name="rplidar" params="parent *origin">
+    <xacro:rplidar_model name="rplidar" parent="${parent}">
+      <xacro:insert_block name="origin" />
+    </xacro:rplidar_model>
+  </xacro:macro>
 </robot>
   

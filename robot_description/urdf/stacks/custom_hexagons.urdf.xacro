@@ -76,15 +76,17 @@
     </joint>
     <link name="pole_top_${number}_link">
       <visual>
-        <origin xyz=" 0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 ${M_PI} 0"/>
         <geometry>
-          <mesh filename="package://robot_description/meshes/stacks/hexagons/pole_top.dae"/>
+          <!-- <mesh filename="package://robot_description/meshes/stacks/hexagons/pole_middle.dae"/> -->
+          <cylinder length="0.05" radius="0.003"/>
+          <xacro:insert_block name="material_aluminum"/>
         </geometry>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <cylinder length="0.2032" radius="0.006"/>
+          <cylinder length="0.05" radius="0.003"/>
         </geometry>
       </collision>
       <inertial>
@@ -93,35 +95,6 @@
         <inertia ixx="0.000206991" ixy="0.0" ixz="0.0"
                  iyy="0.000206991" iyz="0.0"
                  izz="0.000001080"/>
-      </inertial>
-    </link>
-  </xacro:macro>
-
-  <xacro:macro name="stack_3d_sensor_pole" params="parent number x_loc y_loc z_loc">
-    <joint name="pole_kinect_${number}_joint" type="fixed">
-      <origin xyz="${x_loc} ${y_loc} ${z_loc}" rpy="0 0 0"/>
-      <parent link="${parent}"/>
-      <child link="pole_kinect_${number}_link"/>
-    </joint>
-    <link name="pole_kinect_${number}_link">
-      <visual>
-        <origin xyz="0 0 -0.01" rpy="0 0 0"/>
-        <geometry>
-          <mesh filename="package://robot_description/meshes/sensors/sensor_pole.dae" />
-        </geometry>
-      </visual>
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <cylinder length="0.0936" radius="0.006"/>
-        </geometry>
-      </collision>
-      <inertial>
-        <mass value="0.020"/>
-        <origin xyz="0 0 0"/>
-        <inertia ixx="0.000014782" ixy="0.0" ixz="0.0"
-                 iyy="0.000014782" iyz="0.0"
-                 izz="0.000000360"/>
       </inertial>
     </link>
   </xacro:macro>
@@ -180,7 +153,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://robot_description/meshes/stacks/hexagons/plate_middle.dae"/>
+          <mesh filename="package://robot_description/meshes/stacks/hexagons/plate_top.dae"/>
         </geometry>
       </visual>  
       <collision>
@@ -198,15 +171,13 @@
       </inertial>  
     </link>
     
-    <stack_top_pole parent="${parent}" number="0" x_loc= "0.0381" y_loc= "0.1505" z_loc="0.2920"/>
-    <stack_top_pole parent="${parent}" number="1" x_loc= "0.0381" y_loc="-0.1505" z_loc="0.2920"/>
-    <stack_top_pole parent="${parent}" number="2" x_loc="-0.0381" y_loc= "0.1505" z_loc="0.2920"/>
-    <stack_top_pole parent="${parent}" number="3" x_loc="-0.0381" y_loc="-0.1505" z_loc="0.2920"/>
-    <stack_3d_sensor_pole parent="${parent}" number="0" x_loc="-0.1024" y_loc= "0.098" z_loc="0.2372"/>
-    <stack_3d_sensor_pole parent="${parent}" number="1" x_loc="-0.1024" y_loc="-0.098" z_loc="0.2372"/>
+    <!-- <stack_top_pole parent="${parent}" number="0" x_loc= "0.0381" y_loc= "0.1505" z_loc="0.2252"/>
+    <stack_top_pole parent="${parent}" number="1" x_loc= "0.0381" y_loc="-0.1505" z_loc="0.2252"/>
+    <stack_top_pole parent="${parent}" number="2" x_loc="-0.0381" y_loc= "0.1505" z_loc="0.2252"/>
+    <stack_top_pole parent="${parent}" number="3" x_loc="-0.0381" y_loc="-0.1505" z_loc="0.2252"/>
     
     <joint name="plate_top_joint" type="fixed">
-      <origin xyz="-0.01364 0.0  0.3966" rpy="0 0 0"/>
+      <origin xyz="-0.01364 0.0 0" rpy="0 0 0"/>
       <parent link="${parent}"/>
       <child link="plate_top_link"/>
     </joint>  
@@ -214,7 +185,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://robot_description/meshes/stacks/hexagons/plate_top.dae"/>
+          <mesh filename="package://robot_description/meshes/stacks/hexagons/plate_middle.dae"/>
         </geometry>
       </visual>  
       <collision>
@@ -230,6 +201,6 @@
                  iyy="0.003328" iyz="0.0"
                  izz="0.006656" />
       </inertial>
-    </link>
+    </link> -->
   </xacro:macro>
 </robot>
