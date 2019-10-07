@@ -6,7 +6,7 @@
     
     - name: add ROS_IP env variable
       lineinfile:
-        path: /home/ngenator/.bashrc
+        path: "/home/{{ ros_user.name }}/.bashrc"
         regexp: '^export ROS_IP'
         line: 'export ROS_IP="{{ ansible_default_ipv4.address }}"'
         owner: "{{ ros_user.name }}"
@@ -18,5 +18,6 @@
 
 - hosts: mobile_base
   roles:
-    - mobile_base
+    - mobile-base
+    - kobuki-ros
   

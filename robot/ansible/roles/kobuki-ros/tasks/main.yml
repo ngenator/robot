@@ -1,0 +1,4 @@
+- name: clone the repo
+  git:
+    repo: https://github.com/yujinrobot/kobuki.git
+    dest: /home/{{ ros_user.name }}/catkin_ws/src/kobuki

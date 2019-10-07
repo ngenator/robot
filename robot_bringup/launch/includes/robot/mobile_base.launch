@@ -32,13 +32,25 @@
   
   <!-- Safety controller -->
   <node pkg="nodelet" type="nodelet" name="kobuki_safety_controller" 
-    args="load kobuki_safety_controller/SafetyControllerNodelet mobile_base_nodelet_manager">
+    args="load kobuki_safety_controller/SafetyControllerNodelet mobile_base_nodelet_manager" machine="robot">
     <remap from="kobuki_safety_controller/cmd_vel"           to="cmd_vel_mux/input/safety"/>
-    <remap from="kobuki_safety_controller/enable"            to="mobile_base/safety_controller/enable"/>
-    <remap from="kobuki_safety_controller/disable"           to="mobile_base/safety_controller/disable"/>
     <remap from="kobuki_safety_controller/events/bumper"     to="mobile_base/events/bumper"/>
     <remap from="kobuki_safety_controller/events/cliff"      to="mobile_base/events/cliff"/>
     <remap from="kobuki_safety_controller/events/wheel_drop" to="mobile_base/events/wheel_drop"/>
-    <remap from="kobuki_safety_controller/reset"             to="reset"/>
+  </node>
+
+  <!-- Autodocking -->
+  <node pkg="nodelet" type="nodelet" name="dock_drive" 
+    args="load kobuki_auto_docking/AutoDockingNodelet mobile_base_nodelet_manager" machine="robot">
+    <!-- minimum linear velocity in m/s -->
+    <param name="min_abs_v" type="double" value="0.01" />
+    <!-- minimum angular velocity in rad/s -->
+    <param name="min_abs_w" type="double" value="0.1" />
+
+    <remap from="dock_drive/odom"        to="odom"/>
+    <remap from="dock_drive/core"        to="mobile_base/sensors/core"/>
+    <remap from="dock_drive/dock_ir"     to="mobile_base/sensors/dock_ir"/>
+    <remap from="dock_drive/motor_power" to="mobile_base/commands/motor_power"/>
+    <remap from="dock_drive/velocity"    to="cmd_vel_mux/input/docking"/>
   </node>
 </launch>
