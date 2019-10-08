@@ -1,20 +1,30 @@
 <launch>
-  <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager" machine="robot"/>
-  <node pkg="nodelet" type="nodelet" name="mobile_base" args="load kobuki_node/KobukiNodelet mobile_base_nodelet_manager" machine="robot">
-    <rosparam file="$(find kobuki_node)/param/base.yaml" command="load"/>
-    <param name="publish_tf" value="true"/>
+  <!-- Arguments -->
+  <arg name="external_manager" default="false"/>
+  <arg name="manager"          default="mobile_base_nodelet_manager"/>
+
+  <!-- Standalone nodelet manager -->
+  <node unless="$(arg external_manager)" pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" required="true" machine="robot">
+    <param name="num_worker_threads" value="8" />
+  </node>
+
+  <!-- Mobile base -->
+  <node pkg="nodelet" type="nodelet" name="mobile_base" args="load kobuki_node/KobukiNodelet $(arg manager)" machine="robot">
+    <rosparam file="$(find robot_bringup)/params/mobile_base/mobile_base.yaml" command="load"/>
+    <param name="publish_tf"  value="true"/>
     
-    <remap from="mobile_base/odom" to="odom"/>
+    <remap from="mobile_base/odom"         to="odom"/>
     <remap from="mobile_base/joint_states" to="joint_states"/>
   </node>
   
+  <!-- Diagnostic aggregator -->
   <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" machine="robot">
-    <rosparam command="load" file="$(find kobuki_node)/param/diagnostics.yaml" />
+    <rosparam command="load" file="$(find robot_bringup)/params/mobile_base/diagnostics.yaml" />
   </node>
 
-  <!-- Velocity commands multiplexer -->
-  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux"
-    args="load yocs_cmd_vel_mux/CmdVelMuxNodelet mobile_base_nodelet_manager" respawn="true" machine="robot">
+  <!-- Velocity command multiplexer -->
+  <!-- Note: Subscribes to the input topics defined below in yaml_cfg_data -->
+  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet $(arg manager)" respawn="true" machine="robot">
     <rosparam param="yaml_cfg_data">
       '{
         subscribers: [
@@ -31,17 +41,15 @@
   </node>
   
   <!-- Safety controller -->
-  <node pkg="nodelet" type="nodelet" name="kobuki_safety_controller" 
-    args="load kobuki_safety_controller/SafetyControllerNodelet mobile_base_nodelet_manager" machine="robot">
-    <remap from="kobuki_safety_controller/cmd_vel"           to="cmd_vel_mux/input/safety"/>
-    <remap from="kobuki_safety_controller/events/bumper"     to="mobile_base/events/bumper"/>
-    <remap from="kobuki_safety_controller/events/cliff"      to="mobile_base/events/cliff"/>
-    <remap from="kobuki_safety_controller/events/wheel_drop" to="mobile_base/events/wheel_drop"/>
+  <node pkg="nodelet" type="nodelet" name="safety_controller" args="load kobuki_safety_controller/SafetyControllerNodelet $(arg manager)" machine="robot">
+    <remap from="safety_controller/cmd_vel"           to="cmd_vel_mux/input/safety"/>
+    <remap from="safety_controller/events/bumper"     to="mobile_base/events/bumper"/>
+    <remap from="safety_controller/events/cliff"      to="mobile_base/events/cliff"/>
+    <remap from="safety_controller/events/wheel_drop" to="mobile_base/events/wheel_drop"/>
   </node>
 
   <!-- Autodocking -->
-  <node pkg="nodelet" type="nodelet" name="dock_drive" 
-    args="load kobuki_auto_docking/AutoDockingNodelet mobile_base_nodelet_manager" machine="robot">
+  <node pkg="nodelet" type="nodelet" name="dock_drive" args="load kobuki_auto_docking/AutoDockingNodelet $(arg manager)" machine="robot">
     <!-- minimum linear velocity in m/s -->
     <param name="min_abs_v" type="double" value="0.01" />
     <!-- minimum angular velocity in rad/s -->

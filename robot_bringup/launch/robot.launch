@@ -1,18 +1,28 @@
 <launch>
+  <!-- Arguments -->
   <arg name="robot_address" default="192.168.98.234"/>
   <arg name="robot_user"    default="ngenator"/>
 
+  <!-- Robot (for launching nodes remotely) -->
   <machine name="robot" address="$(arg robot_address)" user="$(arg robot_user)" env-loader="/opt/ros/env.sh" default="true"/>
 
   <group>
-    <include file="$(find robot_bringup)/launch/includes/robot/mobile_base.launch"/>
+    <!-- Nodelet manager for nodelets running on the robot -->
+    <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager" machine="robot">
+      <param name="num_worker_threads" value="16" />
+    </node>
 
-    <!-- Additional sensors -->
-    <group>
-      <node pkg="nodelet" type="nodelet" name="sensor_nodelet_manager" args="manager" machine="robot"/>
+    <!-- Mobile Base -->
+    <include file="$(find robot_bringup)/launch/includes/robot/mobile_base.launch">
+      <arg name="external_manager" value="true"/>
+      <arg name="manager"          value="mobile_base_nodelet_manager"/>
+    </include>
 
-      <include file="$(find robot_bringup)/launch/includes/robot/sensors/rplidar.launch"/>
-      <include file="$(find robot_bringup)/launch/includes/robot/sensors/d435.launch"/>
-    </group>
+    <!-- Additional Sensors -->
+    <include file="$(find robot_bringup)/launch/includes/robot/sensors/rplidar.launch"/>
+    <include file="$(find robot_bringup)/launch/includes/robot/sensors/d435.launch">
+      <arg name="external_manager" value="true"/>
+      <arg name="manager"          value="mobile_base_nodelet_manager"/>
+    </include>
   </group>
 </launch>
