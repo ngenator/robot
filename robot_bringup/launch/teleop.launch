@@ -1,7 +1,6 @@
 <launch>
   <!-- Arguments -->
   <arg name="serial_port" default="/dev/input/js0"/>
-  <arg name="cmd_vel_out" default="cmd_vel_mux/input/teleop"/>
 
   <!-- Joystick params -->
   <rosparam file="$(find robot_bringup)/params/controller/joystick.yaml" command="load"/>
@@ -16,6 +15,7 @@
 
   <!-- Joy teleop node for taking raw joystick data and converting to angular velocity msgs -->
   <node pkg="joy_teleop" type="joy_teleop.py" name="joy_teleop" required="true">
-    <remap from="cmd_vel_out" to="$(arg cmd_vel_out)"/>
+    <!-- <remap from="cmd_vel_out" to="teleop_velocity_smoother/input/velocity"/> -->
+    <remap from="cmd_vel_out" to="teleop_velocity_smoother/input/velocity"/>
   </node>
 </launch>

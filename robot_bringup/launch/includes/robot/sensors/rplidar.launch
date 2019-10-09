@@ -1,26 +1,26 @@
 <launch>
   <!-- Arguments -->
   <arg name="serial_port" default="/dev/rplidar"/>
-  <arg name="frame_id"    default="plate_middle_link"/>
   <arg name="motor_pwm"   default="500"/>
+  <arg name="ns"          default="rplidar"/>
 
   <!-- Laser Sensor -->
-  <node pkg="rplidar_ros" type="rplidarNode" name="rplidar" respawn="true" machine="robot">
+  <node pkg="rplidar_ros" type="rplidarNode" name="rplidar" respawn="true">
     <param name="serial_port"         type="string" value="$(arg serial_port)"/>
     <param name="serial_baudrate"     type="int"    value="115200"/>
-    <param name="frame_id"            type="string" value="laser"/>
+    <param name="frame_id"            type="string" value="rplidar_frame"/>
     <param name="inverted"            type="bool"   value="false"/>
     <param name="angle_compensate"    type="bool"   value="true"/>
     <param name="motor_pwm"           type="int"    value="$(arg motor_pwm)"/>
 
-    <remap from="scan" to="sensors/scan"/>
+    <remap from="scan" to="$(arg ns)/scan"/>
   </node>
 
   <!-- Laser filter, to remove scan points within the robot's footprint -->
-  <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter" machine="robot">
+  <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="rplidar_filter">
     <rosparam command="load" file="$(find robot_bringup)/params/mobile_base/sensors/rplidar_filter.yaml" />
 
-    <remap from="scan"          to="sensors/scan"/>
-    <remap from="scan_filtered" to="sensors/scan_filtered"/>
+    <remap from="scan"          to="$(arg ns)/scan"/>
+    <remap from="scan_filtered" to="$(arg ns)/scan_filtered"/>
     </node>
 </launch>

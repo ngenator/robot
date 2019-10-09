@@ -1,4 +1,4 @@
-tf_message_filter_target_frame: laser
+tf_message_filter_target_frame: rplidar_frame
 scan_filter_chain:
 - name: base_footprint
   type: laser_filters/LaserScanRangeFilter

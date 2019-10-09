@@ -1,17 +1,15 @@
 <launch>
   <arg name="external_manager"    default="false"/>
-  <arg name="manager"             default="camera_nodelet_manager"/>
+  <arg name="manager"             default="realsense2_camera_manager"/>
   <arg name="serial_no"           default=""/>
-  <arg name="tf_prefix"           default=""/>
+  <arg name="tf_prefix"           default="camera"/>
   <arg name="json_file_path"      default=""/>
   <arg name="rosbag_filename"     default=""/>
   <arg name="required"            default="false"/>
 
-  <arg name="fisheye_width"       default="0"/>
-  <arg name="fisheye_height"      default="0"/>
+  <arg name="fisheye_width"       default="640"/>
+  <arg name="fisheye_height"      default="480"/>
   <arg name="enable_fisheye"      default="true"/>
-  <arg name="enable_fisheye1"     default="true"/>
-  <arg name="enable_fisheye2"     default="true"/>
 
   <arg name="depth_width"         default="640"/>
   <arg name="depth_height"        default="480"/>
@@ -30,8 +28,8 @@
   <arg name="depth_fps"           default="30"/>
   <arg name="infra_fps"           default="30"/>
   <arg name="color_fps"           default="30"/>
-  <arg name="gyro_fps"            default="0"/>
-  <arg name="accel_fps"           default="0"/>
+  <arg name="gyro_fps"            default="400"/>
+  <arg name="accel_fps"           default="250"/>
   <arg name="enable_gyro"         default="true"/>
   <arg name="enable_accel"        default="true"/>
 
@@ -48,8 +46,6 @@
   <arg name="infra2_frame_id"           default="$(arg tf_prefix)_infra2_frame"/>
   <arg name="color_frame_id"            default="$(arg tf_prefix)_color_frame"/>
   <arg name="fisheye_frame_id"          default="$(arg tf_prefix)_fisheye_frame"/>
-  <arg name="fisheye1_frame_id"         default="$(arg tf_prefix)_fisheye1_frame"/>
-  <arg name="fisheye2_frame_id"         default="$(arg tf_prefix)_fisheye2_frame"/>
   <arg name="accel_frame_id"            default="$(arg tf_prefix)_accel_frame"/>
   <arg name="gyro_frame_id"             default="$(arg tf_prefix)_gyro_frame"/>
   <arg name="pose_frame_id"             default="$(arg tf_prefix)_pose_frame"/>
@@ -59,8 +55,6 @@
   <arg name="infra2_optical_frame_id"   default="$(arg tf_prefix)_infra2_optical_frame"/>
   <arg name="color_optical_frame_id"    default="$(arg tf_prefix)_color_optical_frame"/>
   <arg name="fisheye_optical_frame_id"  default="$(arg tf_prefix)_fisheye_optical_frame"/>
-  <arg name="fisheye1_optical_frame_id" default="$(arg tf_prefix)_fisheye1_optical_frame"/>
-  <arg name="fisheye2_optical_frame_id" default="$(arg tf_prefix)_fisheye2_optical_frame"/>
   <arg name="accel_optical_frame_id"    default="$(arg tf_prefix)_accel_optical_frame"/>
   <arg name="gyro_optical_frame_id"     default="$(arg tf_prefix)_gyro_optical_frame"/>
   <arg name="imu_optical_frame_id"      default="$(arg tf_prefix)_imu_optical_frame"/>
@@ -70,8 +64,6 @@
   <arg name="aligned_depth_to_infra1_frame_id"   default="$(arg tf_prefix)_aligned_depth_to_infra1_frame"/>
   <arg name="aligned_depth_to_infra2_frame_id"   default="$(arg tf_prefix)_aligned_depth_to_infra2_frame"/>
   <arg name="aligned_depth_to_fisheye_frame_id"  default="$(arg tf_prefix)_aligned_depth_to_fisheye_frame"/>
-  <arg name="aligned_depth_to_fisheye1_frame_id" default="$(arg tf_prefix)_aligned_depth_to_fisheye1_frame"/>
-  <arg name="aligned_depth_to_fisheye2_frame_id" default="$(arg tf_prefix)_aligned_depth_to_fisheye2_frame"/>
 
   <arg name="publish_tf"               default="true"/>
   <arg name="tf_publish_rate"          default="0"/> <!-- 0 - static transform -->
@@ -87,24 +79,24 @@
   <arg name="unite_imu_method"         default="none"/> <!-- Options are: [none, copy, linear_interpolation] -->
   <arg name="allow_no_texture_points"  default="false"/>
 
+  <arg name="ns" default="realsense"/>
 
-  <node unless="$(arg external_manager)" pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" output="screen" required="$(arg required)" machine="robot"/>
-  <node pkg="nodelet" type="nodelet" name="realsense2_camera" args="load realsense2_camera/RealSenseNodeFactory $(arg manager)" required="$(arg required)" machine="robot">
+
+  <node unless="$(arg external_manager)" pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" output="screen" required="$(arg required)"/>
+  <node pkg="nodelet" type="nodelet" name="camera" args="load realsense2_camera/RealSenseNodeFactory $(arg manager)" required="$(arg required)">
     <param name="serial_no"                type="str"  value="$(arg serial_no)"/>
     <param name="json_file_path"           type="str"  value="$(arg json_file_path)"/>
     <param name="rosbag_filename"          type="str"  value="$(arg rosbag_filename)"/>
 
-    <param name="enable_pointcloud"        type="bool" value="$(arg enable_pointcloud)"/>
-    <param name="pointcloud_texture_stream" type="str" value="$(arg pointcloud_texture_stream)"/>
-    <param name="pointcloud_texture_index"  type="int" value="$(arg pointcloud_texture_index)"/>
-    <param name="enable_sync"              type="bool" value="$(arg enable_sync)"/>
-    <param name="align_depth"              type="bool" value="$(arg align_depth)"/>
+    <param name="enable_pointcloud"         type="bool" value="$(arg enable_pointcloud)"/>
+    <param name="pointcloud_texture_stream" type="str"  value="$(arg pointcloud_texture_stream)"/>
+    <param name="pointcloud_texture_index"  type="int"  value="$(arg pointcloud_texture_index)"/>
+    <param name="enable_sync"               type="bool" value="$(arg enable_sync)"/>
+    <param name="align_depth"               type="bool" value="$(arg align_depth)"/>
 
     <param name="fisheye_width"            type="int"  value="$(arg fisheye_width)"/>
     <param name="fisheye_height"           type="int"  value="$(arg fisheye_height)"/>
     <param name="enable_fisheye"           type="bool" value="$(arg enable_fisheye)"/>
-    <param name="enable_fisheye1"          type="bool" value="$(arg enable_fisheye1)"/>
-    <param name="enable_fisheye2"          type="bool" value="$(arg enable_fisheye2)"/>
 
     <param name="depth_width"              type="int"  value="$(arg depth_width)"/>
     <param name="depth_height"             type="int"  value="$(arg depth_height)"/>
@@ -114,14 +106,14 @@
     <param name="color_height"             type="int"  value="$(arg color_height)"/>
     <param name="enable_color"             type="bool" value="$(arg enable_color)"/>
 
-    <param name="infra_width"             type="int"  value="$(arg infra_width)"/>
-    <param name="infra_height"            type="int"  value="$(arg infra_height)"/>
+    <param name="infra_width"              type="int"  value="$(arg infra_width)"/>
+    <param name="infra_height"             type="int"  value="$(arg infra_height)"/>
     <param name="enable_infra1"            type="bool" value="$(arg enable_infra1)"/>
     <param name="enable_infra2"            type="bool" value="$(arg enable_infra2)"/>
 
     <param name="fisheye_fps"              type="int"  value="$(arg fisheye_fps)"/>
     <param name="depth_fps"                type="int"  value="$(arg depth_fps)"/>
-    <param name="infra_fps"               type="int"  value="$(arg infra_fps)"/>
+    <param name="infra_fps"                type="int"  value="$(arg infra_fps)"/>
     <param name="color_fps"                type="int"  value="$(arg color_fps)"/>
     <param name="gyro_fps"                 type="int"  value="$(arg gyro_fps)"/>
     <param name="accel_fps"                type="int"  value="$(arg accel_fps)"/>
@@ -134,8 +126,6 @@
     <param name="infra2_frame_id"          type="str"  value="$(arg infra2_frame_id)"/>
     <param name="color_frame_id"           type="str"  value="$(arg color_frame_id)"/>
     <param name="fisheye_frame_id"         type="str"  value="$(arg fisheye_frame_id)"/>
-    <param name="fisheye1_frame_id"        type="str"  value="$(arg fisheye1_frame_id)"/>
-    <param name="fisheye2_frame_id"        type="str"  value="$(arg fisheye2_frame_id)"/>
     <param name="accel_frame_id"           type="str"  value="$(arg accel_frame_id)"/>
     <param name="gyro_frame_id"            type="str"  value="$(arg gyro_frame_id)"/>
     <param name="pose_frame_id"            type="str"  value="$(arg pose_frame_id)"/>
@@ -145,8 +135,6 @@
     <param name="infra2_optical_frame_id"   type="str"  value="$(arg infra2_optical_frame_id)"/>
     <param name="color_optical_frame_id"    type="str"  value="$(arg color_optical_frame_id)"/>
     <param name="fisheye_optical_frame_id"  type="str"  value="$(arg fisheye_optical_frame_id)"/>
-    <param name="fisheye1_optical_frame_id" type="str"  value="$(arg fisheye1_optical_frame_id)"/>
-    <param name="fisheye2_optical_frame_id" type="str"  value="$(arg fisheye2_optical_frame_id)"/>
     <param name="accel_optical_frame_id"    type="str"  value="$(arg accel_optical_frame_id)"/>
     <param name="gyro_optical_frame_id"     type="str"  value="$(arg gyro_optical_frame_id)"/>
     <param name="imu_optical_frame_id"      type="str"  value="$(arg imu_optical_frame_id)"/>
@@ -156,16 +144,14 @@
     <param name="aligned_depth_to_infra1_frame_id"   type="str"  value="$(arg aligned_depth_to_infra1_frame_id)"/>
     <param name="aligned_depth_to_infra2_frame_id"   type="str"  value="$(arg aligned_depth_to_infra2_frame_id)"/>
     <param name="aligned_depth_to_fisheye_frame_id"  type="str"  value="$(arg aligned_depth_to_fisheye_frame_id)"/>
-    <param name="aligned_depth_to_fisheye1_frame_id" type="str"  value="$(arg aligned_depth_to_fisheye1_frame_id)"/>
-    <param name="aligned_depth_to_fisheye2_frame_id" type="str"  value="$(arg aligned_depth_to_fisheye2_frame_id)"/>
 
     <param name="publish_tf"               type="bool"   value="$(arg publish_tf)"/>
     <param name="tf_publish_rate"          type="double" value="$(arg tf_publish_rate)"/>
 
-    <param name="odom_frame_id"            type="str"  value="$(arg odom_frame_id)"/>
-    <param name="topic_odom_in"            type="str"  value="$(arg topic_odom_in)"/>
+    <param name="odom_frame_id"            type="str"    value="$(arg odom_frame_id)"/>
+    <param name="topic_odom_in"            type="str"    value="$(arg topic_odom_in)"/>
     <param name="calib_odom_file"          type="str"    value="$(arg calib_odom_file)"/>
-    <param name="publish_odom_tf"          type="bool" value="$(arg publish_odom_tf)"/>
+    <param name="publish_odom_tf"          type="bool"   value="$(arg publish_odom_tf)"/>
     <param name="filters"                  type="str"    value="$(arg filters)"/>
     <param name="clip_distance"            type="double" value="$(arg clip_distance)"/>
     <param name="linear_accel_cov"         type="double" value="$(arg linear_accel_cov)"/>
@@ -173,5 +159,45 @@
     <param name="unite_imu_method"         type="str"    value="$(arg unite_imu_method)"/>
     <param name="allow_no_texture_points"  type="bool"   value="$(arg allow_no_texture_points)"/>
 
+    <!-- Topic remapping -->
+    <remap from="color/camera_info"                                      to="$(arg ns)/color/camera_info"/>
+    <remap from="color/image_raw"                                        to="$(arg ns)/color/image_raw"/>
+    <remap from="color/image_raw/compressed"                             to="$(arg ns)/color/image_raw/compressed"/>
+    <remap from="color/image_raw/compressed/parameter_descriptions"      to="$(arg ns)/color/image_raw/compressed/parameter_descriptions"/>
+    <remap from="color/image_raw/compressed/parameter_updates"           to="$(arg ns)/color/image_raw/compressed/parameter_updates"/>
+    <remap from="color/image_raw/compressedDepth"                        to="$(arg ns)/color/image_raw/compressedDepth"/>
+    <remap from="color/image_raw/compressedDepth/parameter_descriptions" to="$(arg ns)/color/image_raw/compressedDepth/parameter_descriptions"/>
+    <remap from="color/image_raw/compressedDepth/parameter_updates"      to="$(arg ns)/color/image_raw/compressedDepth/parameter_updates"/>
+    
+    <remap from="depth/camera_info"                                           to="$(arg ns)/depth/camera_info"/>
+    <remap from="depth/image_rect_raw"                                        to="$(arg ns)/depth/image_rect_raw"/>
+    <remap from="depth/image_rect_raw/compressed"                             to="$(arg ns)/depth/image_rect_raw/compressed"/>
+    <remap from="depth/image_rect_raw/compressed/parameter_descriptions"      to="$(arg ns)/depth/image_rect_raw/compressed/parameter_descriptions"/>
+    <remap from="depth/image_rect_raw/compressed/parameter_updates"           to="$(arg ns)/depth/image_rect_raw/compressed/parameter_updates"/>
+    <remap from="depth/image_rect_raw/compressedDepth"                        to="$(arg ns)/depth/image_rect_raw/compressedDepth"/>
+    <remap from="depth/image_rect_raw/compressedDepth/parameter_descriptions" to="$(arg ns)/depth/image_rect_raw/compressedDepth/parameter_descriptions"/>
+    <remap from="depth/image_rect_raw/compressedDepth/parameter_updates"      to="$(arg ns)/depth/image_rect_raw/compressedDepth/parameter_updates"/>
+   
+    <remap from="extrinsics/depth_to_color"  to="$(arg ns)/extrinsics/depth_to_color"/>
+    <remap from="extrinsics/depth_to_infra1" to="$(arg ns)/extrinsics/depth_to_infra1"/>
+
+    <remap from="infra1/camera_info"                                           to="$(arg ns)/infra1/camera_info"/>
+    <remap from="infra1/image_rect_raw"                                        to="$(arg ns)/infra1/image_rect_raw"/>
+    <remap from="infra1/image_rect_raw/compressed"                             to="$(arg ns)/infra1/image_rect_raw/compressed"/>
+    <remap from="infra1/image_rect_raw/compressed/parameter_descriptions"      to="$(arg ns)/infra1/image_rect_raw/compressed/parameter_descriptions"/>
+    <remap from="infra1/image_rect_raw/compressed/parameter_updates"           to="$(arg ns)/infra1/image_rect_raw/compressed/parameter_updates"/>
+    <remap from="infra1/image_rect_raw/compressedDepth"                        to="$(arg ns)/infra1/image_rect_raw/compressedDepth"/>
+    <remap from="infra1/image_rect_raw/compressedDepth/parameter_descriptions" to="$(arg ns)/infra1/image_rect_raw/compressedDepth/parameter_descriptions"/>
+    <remap from="infra1/image_rect_raw/compressedDepth/parameter_updates"      to="$(arg ns)/infra1/image_rect_raw/compressedDepth/parameter_updates"/>
+   
+    <remap from="rgb_camera/auto_exposure_roi/parameter_descriptions" to="$(arg ns)/rgb_camera/auto_exposure_roi/parameter_descriptions"/>
+    <remap from="rgb_camera/auto_exposure_roi/parameter_updates"      to="$(arg ns)/rgb_camera/auto_exposure_roi/parameter_updates"/>
+    <remap from="rgb_camera/parameter_descriptions"                   to="$(arg ns)/rgb_camera/parameter_descriptions"/>
+    <remap from="rgb_camera/parameter_updates"                        to="$(arg ns)/rgb_camera/parameter_updates"/>
+   
+    <remap from="stereo_module/auto_exposure_roi/parameter_descriptions" to="$(arg ns)/stereo_module/auto_exposure_roi/parameter_descriptions"/>
+    <remap from="stereo_module/auto_exposure_roi/parameter_updates"      to="$(arg ns)/stereo_module/auto_exposure_roi/parameter_updates"/>
+    <remap from="stereo_module/parameter_descriptions"                   to="$(arg ns)/stereo_module/parameter_descriptions"/>
+    <remap from="stereo_module/parameter_updates"                        to="$(arg ns)/stereo_module/parameter_updates"/>
   </node>
 </launch>

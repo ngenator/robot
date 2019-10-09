@@ -4,13 +4,15 @@
   <arg name="manager"          default="mobile_base_nodelet_manager"/>
 
   <!-- Standalone nodelet manager -->
-  <node unless="$(arg external_manager)" pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" required="true" machine="robot">
+  <node unless="$(arg external_manager)" pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" required="true">
     <param name="num_worker_threads" value="8" />
   </node>
 
   <!-- Mobile base -->
-  <node pkg="nodelet" type="nodelet" name="mobile_base" args="load kobuki_node/KobukiNodelet $(arg manager)" machine="robot">
+  <node pkg="nodelet" type="nodelet" name="mobile_base" args="load kobuki_node/KobukiNodelet $(arg manager)">
     <rosparam file="$(find robot_bringup)/params/mobile_base/mobile_base.yaml" command="load"/>
+    
+    <!-- Override param file -->
     <param name="publish_tf"  value="true"/>
     
     <remap from="mobile_base/odom"         to="odom"/>
@@ -18,13 +20,13 @@
   </node>
   
   <!-- Diagnostic aggregator -->
-  <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" machine="robot">
+  <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator">
     <rosparam command="load" file="$(find robot_bringup)/params/mobile_base/diagnostics.yaml" />
   </node>
 
   <!-- Velocity command multiplexer -->
-  <!-- Note: Subscribes to the input topics defined below in yaml_cfg_data -->
-  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet $(arg manager)" respawn="true" machine="robot">
+  <!-- Note: Subscribes to the input topics defined below in yaml_cfg_data prefixed with the node name, mux -->
+  <node pkg="nodelet" type="nodelet" name="mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet $(arg manager)" respawn="true">
     <rosparam param="yaml_cfg_data">
       '{
         subscribers: [
@@ -37,19 +39,45 @@
       }'
     </rosparam>
 
-    <remap from="cmd_vel_mux/output/cmd_vel" to="mobile_base/commands/velocity"/>
+    <remap from="mux/input/safety"     to="mobile_base/mux/input/safety"/>
+    <remap from="mux/input/teleop"     to="mobile_base/mux/input/teleop"/>
+    <remap from="mux/input/docking"    to="mobile_base/mux/input/docking"/>
+    <remap from="mux/input/navigation" to="mobile_base/mux/input/navigation"/>
+   
+    <remap from="mux/output/cmd_vel" to="mobile_base/commands/velocity"/>
+  </node>
+
+  <!-- Teleop velocity smoother -->
+  <node pkg="nodelet" type="nodelet" name="teleop_velocity_smoother"
+        args="load yocs_velocity_smoother/VelocitySmootherNodelet $(arg manager)">
+        
+    <!-- parameters -->
+    <rosparam file="$(find robot_bringup)/params/mobile_base/velocity_smoother.yaml" command="load"/>
+
+    <!-- velocity commands I/O -->
+    <remap from="teleop_velocity_smoother/raw_cmd_vel"    to="teleop_velocity_smoother/input/velocity"/>
+    <remap from="teleop_velocity_smoother/smooth_cmd_vel" to="mobile_base/mux/input/teleop"/>
+
+    <!-- Robot velocity feedbacks -->
+    <remap from="teleop_velocity_smoother/robot_cmd_vel"  to="mobile_base/commands/velocity"/>
+    <remap from="teleop_velocity_smoother/odometry"       to="odom"/>
   </node>
   
   <!-- Safety controller -->
-  <node pkg="nodelet" type="nodelet" name="safety_controller" args="load kobuki_safety_controller/SafetyControllerNodelet $(arg manager)" machine="robot">
-    <remap from="safety_controller/cmd_vel"           to="cmd_vel_mux/input/safety"/>
+  <node pkg="nodelet" type="nodelet" name="safety_controller" args="load kobuki_safety_controller/SafetyControllerNodelet $(arg manager)">
+    <remap from="safety_controller/cmd_vel" to="mobile_base/mux/input/safety"/>
+    
     <remap from="safety_controller/events/bumper"     to="mobile_base/events/bumper"/>
     <remap from="safety_controller/events/cliff"      to="mobile_base/events/cliff"/>
     <remap from="safety_controller/events/wheel_drop" to="mobile_base/events/wheel_drop"/>
+    
+    <remap from="safety_controller/disable" to="mobile_base/safety_controller/disable"/>
+    <remap from="safety_controller/enable"  to="mobile_base/safety_controller/enable"/>
+    <remap from="safety_controller/reset"   to="mobile_base/safety_controller/reset"/>
   </node>
 
   <!-- Autodocking -->
-  <node pkg="nodelet" type="nodelet" name="dock_drive" args="load kobuki_auto_docking/AutoDockingNodelet $(arg manager)" machine="robot">
+  <node pkg="nodelet" type="nodelet" name="dock_drive" args="load kobuki_auto_docking/AutoDockingNodelet $(arg manager)">
     <!-- minimum linear velocity in m/s -->
     <param name="min_abs_v" type="double" value="0.01" />
     <!-- minimum angular velocity in rad/s -->
@@ -59,6 +87,9 @@
     <remap from="dock_drive/core"        to="mobile_base/sensors/core"/>
     <remap from="dock_drive/dock_ir"     to="mobile_base/sensors/dock_ir"/>
     <remap from="dock_drive/motor_power" to="mobile_base/commands/motor_power"/>
-    <remap from="dock_drive/velocity"    to="cmd_vel_mux/input/docking"/>
+    <remap from="dock_drive/velocity"    to="mobile_base/mux/input/docking"/>
+
+    <remap from="dock_drive/debug/feedback"   to="mobile_base/dock_drive/dock_drive/debug/feedback"/>
+    <remap from="dock_drive/debug/mode_shift" to="mobile_base/dock_drive/dock_drive/debug/mode_shift"/>
   </node>
 </launch>
