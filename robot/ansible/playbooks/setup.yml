@@ -1,5 +1,9 @@
 - hosts: all
+  name: collect facts for all hosts
   gather_facts: true
+  tasks: [ ]
+
+- hosts: all
   tasks:
     # - debug: var=hostvars[inventory_hostname]
     - debug: var=ansible_default_ipv4.address
@@ -9,6 +13,14 @@
         path: "/home/{{ ros_user.name }}/.bashrc"
         regexp: '^export ROS_IP'
         line: 'export ROS_IP="{{ ansible_default_ipv4.address }}"'
+        owner: "{{ ros_user.name }}"
+        group: "{{ ros_user.group }}"
+    
+    - name: add ROS_MASTER_URI env variable
+      lineinfile:
+        path: "/home/{{ ros_user.name }}/.bashrc"
+        regexp: '^export ROS_MASTER_URI'
+        line: 'export ROS_MASTER_URI="http://{{ hostvars["robot"]["ansible_default_ipv4"]["address"] | default(ansible_default_ipv4.address) }}:11311"'
         owner: "{{ ros_user.name }}"
         group: "{{ ros_user.group }}"
 

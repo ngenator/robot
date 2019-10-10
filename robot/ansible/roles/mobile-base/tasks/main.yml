@@ -1,10 +1,3 @@
 - name: setup mobile_base
-  become: true
   block:
-    - name: add remote env wrapper
-      template:
-        src: templates/env.sh
-        dest: /opt/ros/env.sh
-        mode: '0755'
-        owner: "{{ ros_user.name }}"
-        group: "{{ ros_user.group }}"
+    - debug: msg="TODO - configure mobile_base"

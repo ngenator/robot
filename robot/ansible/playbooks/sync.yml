@@ -1,0 +1,7 @@
+# FIXME: this should use git + version tag once things are stable
+- hosts: '!laptop'
+  name: sync our changes
+  gather_facts: true
+  tasks:
+    - name: sync laptop's version of the metapackage to all hosts
+      debug: msg="do what was being done with rsync"

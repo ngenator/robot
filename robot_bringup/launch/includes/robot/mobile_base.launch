@@ -25,8 +25,8 @@
   </node>
 
   <!-- Velocity command multiplexer -->
-  <!-- Note: Subscribes to the input topics defined below in yaml_cfg_data prefixed with the node name, mux -->
-  <node pkg="nodelet" type="nodelet" name="mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet $(arg manager)" respawn="true">
+  <!-- Note: Subscribes to the input topics defined below in yaml_cfg_data prefixed with the node name -->
+  <node pkg="nodelet" type="nodelet" name="cmd_vel_mux" args="load yocs_cmd_vel_mux/CmdVelMuxNodelet $(arg manager)" respawn="true">
     <rosparam param="yaml_cfg_data">
       '{
         subscribers: [
@@ -38,13 +38,8 @@
         publisher: "output/cmd_vel"
       }'
     </rosparam>
-
-    <remap from="mux/input/safety"     to="mobile_base/mux/input/safety"/>
-    <remap from="mux/input/teleop"     to="mobile_base/mux/input/teleop"/>
-    <remap from="mux/input/docking"    to="mobile_base/mux/input/docking"/>
-    <remap from="mux/input/navigation" to="mobile_base/mux/input/navigation"/>
    
-    <remap from="mux/output/cmd_vel" to="mobile_base/commands/velocity"/>
+    <remap from="cmd_vel_mux/output/cmd_vel" to="mobile_base/commands/velocity"/>
   </node>
 
   <!-- Teleop velocity smoother -->
@@ -55,8 +50,8 @@
     <rosparam file="$(find robot_bringup)/params/mobile_base/velocity_smoother.yaml" command="load"/>
 
     <!-- velocity commands I/O -->
-    <remap from="teleop_velocity_smoother/raw_cmd_vel"    to="teleop_velocity_smoother/input/velocity"/>
-    <remap from="teleop_velocity_smoother/smooth_cmd_vel" to="mobile_base/mux/input/teleop"/>
+    <remap from="teleop_velocity_smoother/raw_cmd_vel"    to="teleop_velocity_smoother/input"/>
+    <remap from="teleop_velocity_smoother/smooth_cmd_vel" to="cmd_vel_mux/input/teleop"/>
 
     <!-- Robot velocity feedbacks -->
     <remap from="teleop_velocity_smoother/robot_cmd_vel"  to="mobile_base/commands/velocity"/>
@@ -65,7 +60,7 @@
   
   <!-- Safety controller -->
   <node pkg="nodelet" type="nodelet" name="safety_controller" args="load kobuki_safety_controller/SafetyControllerNodelet $(arg manager)">
-    <remap from="safety_controller/cmd_vel" to="mobile_base/mux/input/safety"/>
+    <remap from="safety_controller/cmd_vel" to="cmd_vel_mux/input/safety"/>
     
     <remap from="safety_controller/events/bumper"     to="mobile_base/events/bumper"/>
     <remap from="safety_controller/events/cliff"      to="mobile_base/events/cliff"/>
@@ -87,7 +82,7 @@
     <remap from="dock_drive/core"        to="mobile_base/sensors/core"/>
     <remap from="dock_drive/dock_ir"     to="mobile_base/sensors/dock_ir"/>
     <remap from="dock_drive/motor_power" to="mobile_base/commands/motor_power"/>
-    <remap from="dock_drive/velocity"    to="mobile_base/mux/input/docking"/>
+    <remap from="dock_drive/velocity"    to="cmd_vel_mux/input/docking"/>
 
     <remap from="dock_drive/debug/feedback"   to="mobile_base/dock_drive/dock_drive/debug/feedback"/>
     <remap from="dock_drive/debug/mode_shift" to="mobile_base/dock_drive/dock_drive/debug/mode_shift"/>

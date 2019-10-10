@@ -1,11 +1,16 @@
 <launch>
+  <arg name="remote" default="true"/>
+
+  <!-- Joystick params -->
+  <rosparam file="$(find robot_bringup)/params/controller/joystick.yaml" command="load"/>
+
   <!-- !!! All nodes defined after this tag will use it -->
-  <machine name="robot" address="192.168.98.234" user="ngenator" env-loader="/opt/ros/env.sh" default="true"/>
+  <machine if="$(arg remote)" name="robot" address="192.168.98.234" user="ngenator" env-loader="/opt/ros/env.sh" default="true"/>
 
   <group>
     <!-- Nodelet manager for nodelets running on the robot -->
     <node pkg="nodelet" type="nodelet" name="mobile_base_nodelet_manager" args="manager">
-      <param name="num_worker_threads" value="16" />
+      <param name="num_worker_threads" value="20" />
     </node>
 
     <!-- Mobile base driver -->
@@ -19,6 +24,8 @@
       <arg name="external_manager" value="true"/>
       <arg name="manager"          value="mobile_base_nodelet_manager"/>
       <arg name="ns"               value="mobile_base/sensors/realsense"/>
+      <arg name="odom_frame_id"    value="odom_frame"/>
+      <arg name="filters"          value="pointcloud"/>
     </include>
 
     <!-- Lidar -->
@@ -28,5 +35,18 @@
 
     <!-- AMCL -->
     <include file="$(find robot_bringup)/launch/includes/robot/localization.launch"/>
+
+    <!-- Joy node for reading raw joystick data -->
+    <node pkg="joy" type="joy_node" name="joy">
+      <param name="dev"               type="string" value="/dev/input/js0"/>
+      <param name="deadzone"          type="double" value="0.05"/>
+      <param name="coalesce_interval" type="double" value="0.001"/>
+      <param name="autorepeat_rate"   type="int"    value="10"/>
+    </node>
+
+    <!-- Joy teleop node for taking raw joystick data and converting to angular velocity msgs -->
+    <node pkg="joy_teleop" type="joy_teleop.py" name="joy_teleop">
+      <remap from="cmd_vel_out" to="teleop_velocity_smoother/input"/>
+    </node>
   </group>
 </launch>

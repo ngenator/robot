@@ -88,6 +88,8 @@
     <param name="json_file_path"           type="str"  value="$(arg json_file_path)"/>
     <param name="rosbag_filename"          type="str"  value="$(arg rosbag_filename)"/>
 
+    <param name="enable_pose" type="bool" value="true"/>
+
     <param name="enable_pointcloud"         type="bool" value="$(arg enable_pointcloud)"/>
     <param name="pointcloud_texture_stream" type="str"  value="$(arg pointcloud_texture_stream)"/>
     <param name="pointcloud_texture_index"  type="int"  value="$(arg pointcloud_texture_index)"/>

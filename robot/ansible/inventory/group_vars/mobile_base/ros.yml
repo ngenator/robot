@@ -1,0 +1,12 @@
+---
+ros_configuration: ros-base
+ros_packages:
+  - kobuki-core
+  - rtabmap-ros
+  - yocs-cmd-vel-mux
+  - joy
+  - joy-teleop
+  - amcl
+  - robot-state-publisher
+  - joint-state-publisher
+  - topic-tools

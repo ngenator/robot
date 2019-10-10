@@ -1,0 +1,7 @@
+---
+ros_configuration: desktop-full
+ros_packages:
+  - kobuki-msgs
+  - joy
+  - joy-teleop
+  - rtabmap-ros

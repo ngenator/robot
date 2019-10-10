@@ -1,5 +1,16 @@
-- name: install ros packages
+---
+- name: finish setting up system for ROS
   become: true
-  apt:
-    name: "{{ ros_packages | map('regex_replace', '(.*)', 'ros-' + ros_distribution + '-\\1') | list }}"
-    state: present
+  block:
+    - name: install ros packages
+      apt:
+        name: "{{ ros_packages | map('regex_replace', '(.*)', 'ros-' + ros_distribution + '-\\1') | list }}"
+        state: present
+
+    - name: add remote env wrapper for roslaunch
+      template:
+        src: templates/env.sh
+        dest: /opt/ros/env.sh
+        mode: '0755'
+        owner: "{{ ros_user.name }}"
+        group: "{{ ros_user.group }}"
