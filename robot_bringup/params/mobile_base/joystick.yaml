@@ -1,9 +1,9 @@
 teleop:
   drive:
-    axis_mappings: # steam/xbox controller
-      - {axis: 1, offset: 0.0, scale: 0.85, target: linear.x} # left stick up/down
+    axis_mappings: # 8bitdo controller
+      - {axis: 1, offset: 0.0, scale: 0.75, target: linear.x} # left stick up/down
       - {axis: 0, offset: 0.0, scale: 1.5, target: angular.z} # left stick left/right
-    deadman_buttons: [3] # B
+    deadman_buttons: [0] # A
     message_type: geometry_msgs/Twist
     topic_name: cmd_vel_out
     type: topic
